@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-tw">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文淺顯直白的介紹反向傳播算法（BP 算法, The Back Propagation Algorithm）的理解思路, 計算過程和程式實現  我們考慮一個最簡單的layer,這個layer有兩個input $x_1, x_2$ 和1個output $y_1$: 則數學式可以寫成:$$ y_1 = w_{1}x_1+w_{2}x_2$$ 上式的$w$下標是跟著$x$在跑, 考慮到$y$可以擴展成$">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BP Algorithm的理解思路">
+<meta property="og:url" content="https://purelyvivid.github.io/2019/07/05/BPalgo/index.html">
+<meta property="og:site_name" content="Hui-Yu Huang&#39;s Blog">
+<meta property="og:description" content="本文淺顯直白的介紹反向傳播算法（BP 算法, The Back Propagation Algorithm）的理解思路, 計算過程和程式實現  我們考慮一個最簡單的layer,這個layer有兩個input $x_1, x_2$ 和1個output $y_1$: 則數學式可以寫成:$$ y_1 = w_{1}x_1+w_{2}x_2$$ 上式的$w$下標是跟著$x$在跑, 考慮到$y$可以擴展成$">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/eRqdjfG.png">
+<meta property="og:updated_time" content="2019-07-06T16:43:34.403Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BP Algorithm的理解思路">
+<meta name="twitter:description" content="本文淺顯直白的介紹反向傳播算法（BP 算法, The Back Propagation Algorithm）的理解思路, 計算過程和程式實現  我們考慮一個最簡單的layer,這個layer有兩個input $x_1, x_2$ 和1個output $y_1$: 則數學式可以寫成:$$ y_1 = w_{1}x_1+w_{2}x_2$$ 上式的$w$下標是跟著$x$在跑, 考慮到$y$可以擴展成$">
+<meta name="twitter:image" content="https://i.imgur.com/eRqdjfG.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://purelyvivid.github.io/2019/07/05/BPalgo/">
+
+
+
+
+
+  <title>BP Algorithm的理解思路 | Hui-Yu Huang's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hui-Yu Huang's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">To Live is to Wonder</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://purelyvivid.github.io/2019/07/05/BPalgo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hui-Yu Huang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar_2016.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hui-Yu Huang's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">BP Algorithm的理解思路</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-07-05T12:00:00+08:00">
+                2019-07-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文淺顯直白的介紹反向傳播算法（BP 算法, The Back Propagation Algorithm）的理解思路, 計算過程和程式實現</p>
+<hr>
+<p>我們考慮一個最簡單的layer,這個layer有兩個input $x_1, x_2$ 和1個output $y_1$:<br><img src="https://i.imgur.com/eRqdjfG.png" alt></p>
+<p>則數學式可以寫成:<br>$$ y_1 = w_{1}x_1+w_{2}x_2$$</p>
+<p>上式的$w$下標是跟著$x$在跑, 考慮到$y$可以擴展成$y_j$(不只一個$y$), 我們改一下$w$的下標, 也把$y$的標號考慮進去:<br>$$ y_1 = w_{11}x_1+w_{12}x_2$$</p>
+<p>其中$w_{ji}$的第一個下標$j$是跟著$y$在跑, 而$i$是跟著$x$在跑, 整個式子可以寫成矩陣形式:<br>$$Y=WX$$</p>
+<p>其中令輸入$X$有$n$維, 輸出$Y$有$m$維:</p>
+<p>$$X=[x_1,\ x_2, … , x_i,\ …\ ,\ x_n\ ]^T$$</p>
+<p>$$Y=[y_1,\ y_2, … , y_j,\ …\ ,\ y_m\ ]^T$$</p>
+<p>$$ W=<br>{\left[ \begin{array}{ccc}<br>w_{11},\ w_{12}, … ,\ w_{1n}\ \<br>… , w_{ji}, … \<br>w_{m1},\ w_{m2}, … ,\ w_{mn}\ \<br>\end{array}\right ]} = { w_{ji} }_{m \times n}$$</p>
+<p>通常我們還會把上式加個<strong>偏置</strong>(bias) $B$:</p>
+<p>$$Y=WX+B$$</p>
+<p>$B$維度會和$Y$相同<br>$$B=[b_1,\ b_2, … , b_j,\ …\ ,\ b_m\ ]^T$$</p>
+<p>通常還會再加個可微分的激活函數$\sigma$來增加其非線性:</p>
+<p>$$Y=\sigma(WX+B)$$</p>
+<p>以上是”前饋”(forward)的部分</p>
+<hr>
+<p>接下來考慮”反向傳播”(backward)的部分,假設損失函數(loss function)$\mathbb{J}$ 有$d$維, 下標用$k$表示:</p>
+<p>$$ Assume\ lost function\ \mathbb{J}\ has\ dim\ d $$</p>
+<p>$$\mathbb{J}=[J_1,\ J_2, … , J_k,\ …\ ,\ J_d\ ]^T$$</p>
+<p>損失梯度(Gradient)要從輸出$Y$流回輸入$X$, 並流到$W$和$B$以進行權重和偏置的更新(update), 也就是可以把問題定義成:</p>
+<p>$$ Given\  \frac{\partial J_k}{\partial y_{j}} , find\ \frac{\partial J_k}{\partial w_{ji}},\ \frac{\partial J_k}{\partial b_j} , and\ \frac{\partial J_k}{\partial x_i}   $$</p>
+<p>梯度傳遞會用到微積分的<strong>鏈鎖率</strong>(Chain Rule), 為了方便起見我們多定義一個$Z$:</p>
+<p>$$ Z = WX+B $$</p>
+<p>$$ Y = \sigma (Z) $$</p>
+<p>$$Z=[z_1,\ z_2, … , z_j,\ …\ ,\ z_m\ ]^T$$</p>
+<p>可以發現, 上式和原本的$Y=\sigma(WX+B)$並沒有不同, 只是計算過程中間多一個$Z$</p>
+<p>定義輸出梯度(已知):<br>$$\nabla_{out} = \frac{\partial J_k}{\partial y_{j}}$$</p>
+<p>定義輸入梯度(待求):<br>$$\nabla_{in} = \frac{\partial J_k}{\partial x_{i}}$$</p>
+<p>用鏈鎖率(Chain Rule)將待求的項目展開:</p>
+<p>$$ \frac{\partial J_k}{\partial w_{ji}} = \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  \frac{\partial z_j}{\partial w_{ji}} = G_{kj}\ \frac{\partial z_j}{\partial w_{ji}} \ \ …(1)$$</p>
+<p>$$ \frac{\partial J_k}{\partial b_{j}} =  \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  \frac{\partial z_j}{\partial b_{j}}  = G_{kj}\ \frac{\partial z_j}{\partial b_{j}}  \ \ …(2)$$ </p>
+<p>$$ \frac{\partial J_k}{\partial x_{i}}\ (\nabla_{in}) =  \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  \frac{\partial z_j}{\partial x_{i}}  = G_{kj}\ \frac{\partial z_j}{\partial x_{i}}  \ \ …(3)$$ </p>
+<p>上列各式重複$\frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}$的部分, 方便起見, 定義中介梯度$\mathbb{G}$:</p>
+<p>$$ \mathbb{G}\ =  \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  $$ </p>
+<p>$$ \mathbb{G}=<br>{\left[ \begin{array}{ccc}<br>G_{11},\ G_{12}, … ,\ G_{1m}\ \<br>… , G_{kj}, … \<br>G_{k1},\ G_{k2}, … ,\ G_{dm}\ \<br>\end{array}\right ]} ={ G_{kj}}_{d \times m}$$</p>
+<p>至此, 整個計算流程(計算圖)已經很明朗了,<br>我們的目的就是找到:</p>
+<p>$$ Find\ \ \mathbb{G},\  \frac{\partial z_j}{\partial w_{ji}} ,\  \frac{\partial z_j}{\partial b_{j}} ,\  \frac{\partial z_j}{\partial x_{i}} $$ </p>
+<p>只要算出上述四項, 就可以得到所求</p>
+<ol>
+<li>計算$G_{kj}$</li>
+</ol>
+<p>$$  \frac{\partial y_j}{\partial z_j}  = \sigma ‘ (z_j) $$ </p>
+<p>$$ =&gt; G_{kj} = \frac{\partial J_k}{\partial y_{j}}\ \sigma ‘ (z_j) = (dout)\ \sigma ‘ (z_j)$$ </p>
+<ol start="2">
+<li>計算$\frac{\partial z_j}{\partial w_{ji}} ,\  \frac{\partial z_j}{\partial b_{j}} ,\  \frac{\partial z_j}{\partial x_{i}}$</li>
+</ol>
+<p>$$  \frac{\partial z_j}{\partial w_{ji}}  = x_{i} $$ </p>
+<p>$$  \frac{\partial z_j}{\partial b_{j}}  = 1 $$ </p>
+<p>$$  \frac{\partial z_j}{\partial x_{i}}  = w_{ji} $$ </p>
+<ol start="3">
+<li>代入式(1)(2)(3), 得到結果</li>
+</ol>
+<p>$$ =&gt; \frac{\partial J_k}{\partial w_{ji}} = G_{kj} \ x_i\ ,\ \ \frac{\partial J_k}{\partial b_{j}} = G_{kj} , \ \ \frac{\partial J_k}{\partial x_{i}}\ (\nabla_{in}) =  G_{kj}\ w_{ji}\ $$</p>
+<hr>
+<p>以上就是整個BP演算法”單層”的計算過程, 化成python程式碼如下:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">backward</span><span class="params">(self,dout)</span>:</span>  </span><br><span class="line">    Z,x = self.cache</span><br><span class="line">    G = dout * self.dactive_fn(Z)</span><br><span class="line">    din = G.dot(self.W.T)</span><br><span class="line">    dW = x.T.dot(G) </span><br><span class="line">    db = G.sum(axis=<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> din,dW,db</span><br></pre></td></tr></table></figure>
+
+<p>程式碼來源: <a href="https://github.com/purelyvivid/DeepLearning_practice/blob/master/3.%20BP%20algo.py" target="_blank" rel="noopener">https://github.com/purelyvivid/DeepLearning_practice/blob/master/3.%20BP%20algo.py</a> (用numpy寫一個BP algorithm)</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/07/GCN_1/" rel="prev" title="GCN(Graph Convolutional Network)的理解">
+                GCN(Graph Convolutional Network)的理解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar_2016.jpeg" alt="Hui-Yu Huang">
+            
+              <p class="site-author-name" itemprop="name">Hui-Yu Huang</p>
+              <p class="site-description motion-element" itemprop="description">Machine Learning, Deep Learning, Graph Neural Network, Natural Language Processing</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/purelyvivid" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:purelyvivid@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hui-Yu Huang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
