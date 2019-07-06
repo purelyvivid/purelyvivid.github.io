@@ -88,6 +88,9 @@
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="https://pic4.zhimg.com/80/v2-394cb7b5f6dfb23dcddd838ebdee548b_hd.jpg">
 <meta property="og:image" content="https://cdn-images-1.medium.com/max/1200/1*1VJDP6qDY9-ExTuQVEOlVg.gif">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-4a3967e884e413c9d0c5e10af79884c7_hd.jpg">
+<meta property="og:image" content="http://paradise.caltech.edu/~yli/software/pceditor/3dselect2.png">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1600/1*IPmyksaiYuo0fflQSUB4BQ.png">
 <meta property="og:image" content="https://i.imgur.com/sJHABf0.png">
 <meta property="og:image" content="https://i.imgur.com/lWAHzMi.png">
 <meta property="og:image" content="https://www.zhihu.com/equation?tex=+L%3D+U%5Cleft%28%5Cbegin%7Bmatrix%7D%5Clambda_1+%26+%5C%5C%26%5Cddots+%5C%5C+%26%26%5Clambda_n+%5Cend%7Bmatrix%7D%5Cright%29+U%5E%7B-1%7D">
@@ -99,7 +102,7 @@
 <meta property="og:image" content="https://www.zhihu.com/equation?tex=+g_%5Ctheta%28%5CLambda%29%3D%5Cleft%28%5Cbegin%7Bmatrix%7D%5Ctheta_1+%26%5C%5C%26%5Cddots+%5C%5C+%26%26%5Ctheta_n+%5Cend%7Bmatrix%7D%5Cright%29">
 <meta property="og:image" content="https://www.zhihu.com/equation?tex=%5Csum_%7Bj%3D0%7D%5EK+%5Calpha_j+%5Clambda%5Ej_l">
 <meta property="og:image" content="https://www.zhihu.com/equation?tex=+y_%7Boutput%7D%3D%5Csigma+%5Cleft%28+%5Csum_%7Bj%3D0%7D%5EK+%5Calpha_j+L%5Ej+x+%5Cright%29+%5Cqquad%285%29">
-<meta property="og:updated_time" content="2019-07-06T16:44:05.948Z">
+<meta property="og:updated_time" content="2019-07-06T16:57:44.197Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="GCN(Graph Convolutional Network)的理解">
 <meta name="twitter:description" content="在深度學習領域的人，對捲積(Convolution)應該都不陌生，但不一定聽說過圖(Graph)也可以做Convolution。這篇文章對GCN(Graph Convolutional Network)做了概略的介紹。  CNN的捲積不是數學定義上的連續捲積，而是一種定義的離散捲積。我們用這種捲積來處理圖像(image)，從圖像中提取特徵，並且透過神經網路來學習捲積的權重(weight)。以下所稱">
@@ -326,7 +329,7 @@
 <ul>
 <li>生物/化學分子 Chemical/ Biological Graphs</li>
 </ul>
-<p>![](<a href="https://pic2.zhimg.com/80/v2-4a3967e884e413c9d0c5e10af79884c7_hd.jpg" target="_blank" rel="noopener">https://pic2.zhimg.com/80/v2-4a3967e884e413c9d0c5e10af79884c7_hd.jpg</a> =300x)</p>
+<p><img src="https://pic2.zhimg.com/80/v2-4a3967e884e413c9d0c5e10af79884c7_hd.jpg" alt></p>
 <ul>
 <li>Citation Networks / Social Networks </li>
 </ul>
@@ -334,8 +337,8 @@
 <ul>
 <li>Unstructured Graphs: 例如3D點雲, 或者是圖像的半監督學習</li>
 </ul>
-<p>![](<a href="http://paradise.caltech.edu/~yli/software/pceditor/3dselect2.png" target="_blank" rel="noopener">http://paradise.caltech.edu/~yli/software/pceditor/3dselect2.png</a> =200x)</p>
-<p>![](<a href="https://cdn-images-1.medium.com/max/1600/1*IPmyksaiYuo0fflQSUB4BQ.png" target="_blank" rel="noopener">https://cdn-images-1.medium.com/max/1600/1*IPmyksaiYuo0fflQSUB4BQ.png</a> =500x)</p>
+<p><img src="http://paradise.caltech.edu/~yli/software/pceditor/3dselect2.png" alt></p>
+<p><img src="https://cdn-images-1.medium.com/max/1600/1*IPmyksaiYuo0fflQSUB4BQ.png" alt></p>
 <p>Non-Euclidean的數據，大致上可以當作<strong>圖</strong>(Graph)來理解。也就是可以理解成$G=(V,E)$，由頂點(vertex)和邊(edge)所構成的一種資料格式。</p>
 <p><strong>Euclidean數據可以當作是Non-Euclidean的一種特例</strong>。因此對Non-Euclidean理解和處理，可以在Euclidean數據上通用，這就是為什麼Non-Euclidean數據的表示法學習有其重要性。</p>
 <p>![](<a href="https://i.imgur.com/VVYfDyx.png" target="_blank" rel="noopener">https://i.imgur.com/VVYfDyx.png</a> =500x)</p>
@@ -795,6 +798,28 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
 
   
 
