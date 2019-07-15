@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-tw">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Linear Model, Kernel Model, SVM,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="要真正了解SVM (Support Vector Machines, 支持向量機), 必須了解什麼是核模型和核技巧, 假如只粗淺地知道它是一個最大化間隔(margin)的方法就太可惜了。以下從線性模型(Linear Model)開始, 逐步講到核模型(Kernel Model), 一窺其優雅之處。 線性模型(Linear Model)假如我們要學習一個函數$f$, 而假定這個函數的輸入(input">
+<meta name="keywords" content="Linear Model, Kernel Model, SVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="從線性模型(Linear Model)到核模型(Kernel Model)">
+<meta property="og:url" content="https://purelyvivid.github.io/2019/07/15/kernel_model/index.html">
+<meta property="og:site_name" content="Hui-Yu Huang&#39;s Blog">
+<meta property="og:description" content="要真正了解SVM (Support Vector Machines, 支持向量機), 必須了解什麼是核模型和核技巧, 假如只粗淺地知道它是一個最大化間隔(margin)的方法就太可惜了。以下從線性模型(Linear Model)開始, 逐步講到核模型(Kernel Model), 一窺其優雅之處。 線性模型(Linear Model)假如我們要學習一個函數$f$, 而假定這個函數的輸入(input">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.stack.imgur.com/UvH8A.png">
+<meta property="og:image" content="https://img-blog.csdn.net/20150521153347166">
+<meta property="og:updated_time" content="2019-07-15T11:11:44.555Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="從線性模型(Linear Model)到核模型(Kernel Model)">
+<meta name="twitter:description" content="要真正了解SVM (Support Vector Machines, 支持向量機), 必須了解什麼是核模型和核技巧, 假如只粗淺地知道它是一個最大化間隔(margin)的方法就太可惜了。以下從線性模型(Linear Model)開始, 逐步講到核模型(Kernel Model), 一窺其優雅之處。 線性模型(Linear Model)假如我們要學習一個函數$f$, 而假定這個函數的輸入(input">
+<meta name="twitter:image" content="https://i.stack.imgur.com/UvH8A.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://purelyvivid.github.io/2019/07/15/kernel_model/">
+
+
+
+
+
+  <title>從線性模型(Linear Model)到核模型(Kernel Model) | Hui-Yu Huang's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-tw">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hui-Yu Huang's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">To Live is to Wonder</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            歸檔
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://purelyvivid.github.io/2019/07/15/kernel_model/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hui-Yu Huang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar_2016.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hui-Yu Huang's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">從線性模型(Linear Model)到核模型(Kernel Model)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-07-15T12:00:00+08:00">
+                2019-07-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>要真正了解SVM (Support Vector Machines, 支持向量機), 必須了解什麼是<strong>核模型</strong>和<strong>核技巧</strong>, 假如只粗淺地知道它是一個<strong>最大化間隔</strong>(margin)的方法就太可惜了。以下從<strong>線性模型</strong>(Linear Model)開始, 逐步講到<strong>核模型</strong>(Kernel Model), 一窺其優雅之處。</p>
+<h2 id="線性模型-Linear-Model"><a href="#線性模型-Linear-Model" class="headerlink" title="線性模型(Linear Model)"></a>線性模型(Linear Model)</h2><p>假如我們要學習一個函數$f$, 而假定這個函數的輸入(input)是一維的, 輸出是一個純量(scalar), 最直觀的函數模擬方式就是<strong>線性模型</strong>, 考慮一個<strong>線性加法模型</strong>, 也就是把每個$x$前面冠上一個參數$\theta$, 再線性加總起來:</p>
+<p>$$f_{\theta}=\sum_{j=1}^{d} \theta_{j}x_{j}=\Theta\mathbf{x}$$</p>
+<p>$$\mathbf{x} = (x_1, x_2, …, x_d)^T$$</p>
+<p>$$\Theta = (\theta_1, \theta_2,…, \theta_d)$$</p>
+<h2 id="廣義線性模型-Generailized-Linear-Model"><a href="#廣義線性模型-Generailized-Linear-Model" class="headerlink" title="廣義線性模型(Generailized Linear Model)"></a>廣義線性模型(Generailized Linear Model)</h2><p>然而, 當遇到複雜函數時, 線性模型顯然不足以表達, 因此定義<strong>廣義線性模型</strong>:</p>
+<p>$$f_{\theta}=\sum_{j=1}^{b} \theta_{j}\phi_{j}(\mathbf{x})=\Theta\Phi$$</p>
+<p>$$\Theta = (\theta_1, \theta_2,…, \theta_b)$$</p>
+<p>$$\Phi = (\phi_1(\mathbf{x}),\phi_2(\mathbf{x}), …, \phi_b(\mathbf{x}))^T $$</p>
+<p>其中, $b$是基函數(basis function)的個數, 此時就可以來表達非線性模型了, 可以透過設計一組好的基函數, 來增加模型的表達能力。</p>
+<p>為了把特徵空間複雜化, 通常基函數的個數$b$會遠大於輸入的維度$d$ ($b&gt;&gt;d$), 這個$\phi$可以視為是將特徵從$d$維映射到$b$維的函數。</p>
+<p>特徵複雜化之後可以做什麼呢?</p>
+<p>(1)對於<strong>迴歸</strong>(regression)型任務, 特徵複雜化有助於函數擬合(curve fitting)。</p>
+<p>(2)對於<strong>分類</strong>(classification)型任務, 特徵複雜化有助於找到好的分割超平面(hyperplane)。</p>
+<p><img src="https://i.stack.imgur.com/UvH8A.png" alt></p>
+<p>這裡的基函數, 可以定義成:</p>
+<p>$$\phi(x)=(1, x, x^2, …, x^{(b-1)})^T$$</p>
+<p>這種形式, $f_{\theta}$就成為<strong>多項式</strong>(polynomial)</p>
+<p>或是定義成:</p>
+<p>$$\phi(x)=(1, sin(x), cos(x), sin(2x), cos(2x)…, sin(mx), cos(mx))^T$$</p>
+<p>$$b=2m+1$$<br>函數$f_{\theta}$就成為<strong>離散傅立葉級數</strong>(Discrete Fourier series)。</p>
+<p>經過適當設計,可以讓$\Phi(\mathbf{x})$成為對$\mathbf{x}$進行離散傅立葉變換（Discrete Fourier Transform，DFT）。</p>
+<p>如果考慮連續傅立葉變換, 基函數可以無窮多個, 也就是說, 甚至可以將特徵從維度$d$投影到<strong>無窮維</strong>。</p>
+<h2 id="核模型-Kernel-Model"><a href="#核模型-Kernel-Model" class="headerlink" title="核模型(Kernel Model)"></a>核模型(Kernel Model)</h2><p>前面講到, 廣義線性模型將特徵$\mathbf{x}$透過$\phi$映射到更多維甚至無窮維的空間, 這時候就產生一個問題: <strong>如何設計最好的$\phi$</strong>?</p>
+<p>這是一個頗難的問題, 想想看, 先不要管基函數的形式怎麼設計(多項式?三角函數?指數?), 光是<strong>基函數的個數</strong>$b$就難以決定: 到底要投影到<strong>幾維</strong>才足夠複雜到可以解決任務, 且<strong>維度詛咒</strong>(curse of dimensionality)又不至於太過嚴重呢?</p>
+<p><img src="https://img-blog.csdn.net/20150521153347166" alt></p>
+<p>面對這種看起來毫無頭緒的問題, 這時候需要引入一些先驗假設, 而最好的先驗知識來源, 就是我們的<strong>輸入樣本</strong>(也就是數據)。</p>
+<p>試想, 假如數據中隱含某種模式或原則, 符合模式的那些樣本彼此之間應該距離較近; 或者換個方式說, 過去有出現過的樣本在特徵空間中的分布如果集中在某個位置, 我們可以假定下一個出現的樣本應該有比較大的機率出現在相同位置。</p>
+<p>因此, 想要從樣本中找規律, 我們有時會希望讓不同樣本之間可以產生一些互動, 此時通常會涉及到計算:$\phi(x_i)\phi(x_j)$, 也就是<strong>兩個特徵向量的內積</strong>, 而這個內積其實並不好計算, 尤其當特徵空間維度(基函數個數$b$)很大的時候。</p>
+<p>此時<strong>核函數</strong>(kernel function)$K$就能派上用場, 核函數是一個二元函數$K(\cdot,\cdot)$ 是一個定義<strong>內積</strong>的函數, 可被設計, 而<strong>核模型</strong>(Kernel Model)可以表示為<strong>核函數的線性組合</strong>。</p>
+<p>$$f_{\theta}=\sum_{j=1}^{n} \theta_{j}K(\mathbf{x},\mathbf{x}_ j)=\Theta\mathbf{K}$$</p>
+<p>其中$n$是樣本數, 注意: <strong>線性模型</strong>的基函數與樣本無關, 然而<strong>核模型</strong>設計時會用到輸入樣本${\mathbf{x}<em>{j}}</em>{j=1}^{n}$, 核函數構成的矩陣$\mathbf{K}$可以寫成:</p>
+<p>$$ \mathbf{K}=<br>{\left[ \begin{array}{ccc}<br>K(\mathbf{x}<em>1,\mathbf{x}_1),\ K(\mathbf{x}_2,\mathbf{x}_1), … ,\ K(\mathbf{x}_n,\mathbf{x}_1)\ \<br>K(\mathbf{x}_1,\mathbf{x}_2),\ K(\mathbf{x}_2,\mathbf{x}_2), … ,\ K(\mathbf{x}_n,\mathbf{x}_2)\ \<br>…,\ …, \ …\ \<br>K(\mathbf{x}_1,\mathbf{x}_n),\ K(\mathbf{x}_2,\mathbf{x}_n), … ,\ K(\mathbf{x}_n,\mathbf{x}_n)\ \<br>\end{array}\right ]}</em>{n \times n} $$</p>
+<p>值得注意的是, <strong>核模型的參數個數只與樣本數$n$有關, 與輸入的維度$d$無關</strong>, 這代表在樣本數不大($d&gt;&gt;n$)的情形下, 核模型可以避免<strong>維度災難</strong>。</p>
+<p>即使$n$很大, 只要取輸入樣本${\mathbf{x}<em>{j}}</em>{j=1}^{n}$的部分集合均值${\mathbf{c}<em>{j}}</em>{j=1}^{b}$來進行計算$(b&lt;&lt;n)$, 維度也能得到很好的控制。</p>
+<p>$$f_{\theta}=\sum_{j=1}^{b} \theta_{j}K(\mathbf{x},\mathbf{c}_ j)=\Theta\mathbf{K}_{b \times n}$$</p>
+<p>核模型並非線性模型, 但是線性模型可以視為核模型的特例。</p>
+<p>透過這種<strong>定義核函數</strong>的方法, 對基函數的<strong>內積</strong>進行特殊設計, 使得<strong>不須直接設計基函數</strong>, 透過定義核函數而隱式地(implicitly)定義了基函數, 這種方法稱為<strong>核技巧</strong>(kernel trick)或<strong>核方法</strong>(kernel method)。</p>
+<p><strong>核函數</strong>的設計要滿足一些條件, 核函數必須是<strong>對稱函數</strong>, 且所構成的核矩陣$\mathbf{K}$必須要是<strong>半正定</strong>(證明可參考<a href="https://pdfs.semanticscholar.org/2862/e7b8fefb209cdb4c47a1643f2af71cd67b00.pdf" target="_blank" rel="noopener">Scholkopf and Smola, 2002</a>)</p>
+<p>幾種常用的核函數如下:</p>
+<ol>
+<li>線性核</li>
+</ol>
+<p>$$K(\mathbf{x}_i, \mathbf{x}_j)=\mathbf{x}_i^{T}\mathbf{x}_j$$</p>
+<ol start="2">
+<li>多項式核</li>
+</ol>
+<p>$$K(\mathbf{x}_i, \mathbf{x}_j)=(\mathbf{x}_i^{T}\mathbf{x}_j)^d, d\geq1$$</p>
+<ol start="3">
+<li>高斯核(一種徑向基函數核, Radial basis function kernel, RBF核)</li>
+</ol>
+<p>$$K(\mathbf{x}_i, \mathbf{x}_j)=exp(-\frac{||\mathbf{x}_i-\mathbf{x}_j||^2}{2\sigma^2})$$</p>
+<p>高斯核(RBF核)是最常用的一種kernel, 它的意義是將每個樣本的出現都視為由一個高斯分布的隨機變數$X_j \sim N(\mathbf{x}_{j}, \sigma)$生成, 而待學習的參數$\theta_j$則是這個分布的<strong>高度</strong>。</p>
+<p><strong>高斯核模型</strong>是用高斯核函數的加權加總在逼近一個未知函數, 這個函數逼近的過程<a href="https://shomy.top/2017/02/26/rbf-network/" target="_blank" rel="noopener">可以看做是一個簡單神經網路</a>。</p>
+<p> <strong>高斯核模型</strong>又有點像是$n$個Component的<strong>高斯混合模型</strong>（Gaussian mixture model，GMM）, 兩者都需要學習每個高斯的權重(weight), 但兩者仍有本質上的不同, GMM的機率密度函數是學習出來的, 在高斯核模型中, 期望值(Means)和共變異數（Covariances）都是固定的, 不像在GMM中是可學習的參數, 這是由於RBF核當初設計的目的是為了做<strong>多變量插值</strong>的緣故。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linear-Model-Kernel-Model-SVM/" rel="tag"># Linear Model, Kernel Model, SVM</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/07/GCN_1/" rel="next" title="GCN(Graph Convolutional Network)的理解">
+                <i class="fa fa-chevron-left"></i> GCN(Graph Convolutional Network)的理解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目錄
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            本站概覽
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar_2016.jpeg" alt="Hui-Yu Huang">
+            
+              <p class="site-author-name" itemprop="name">Hui-Yu Huang</p>
+              <p class="site-description motion-element" itemprop="description">Machine Learning, Deep Learning, Graph Neural Network, Natural Language Processing</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">文章</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">標籤</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/purelyvivid" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:purelyvivid@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#線性模型-Linear-Model"><span class="nav-number">1.</span> <span class="nav-text">線性模型(Linear Model)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#廣義線性模型-Generailized-Linear-Model"><span class="nav-number">2.</span> <span class="nav-text">廣義線性模型(Generailized Linear Model)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核模型-Kernel-Model"><span class="nav-number">3.</span> <span class="nav-text">核模型(Kernel Model)</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hui-Yu Huang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 強力驅動</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主題 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
