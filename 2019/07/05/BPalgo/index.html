@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="back propagation, gradient,">
 
 
 
@@ -80,6 +80,7 @@
 
 
 <meta name="description" content="本文淺顯直白的介紹反向傳播算法（BP 算法, The Back Propagation Algorithm）的理解思路, 計算過程和程式實現  我們考慮一個最簡單的layer,這個layer有兩個input $x_1, x_2$ 和1個output $y_1$: 則數學式可以寫成:$$ y_1 = w_{1}x_1+w_{2}x_2$$ 上式的$w$下標是跟著$x$在跑, 考慮到$y$可以擴展成$">
+<meta name="keywords" content="back propagation, gradient">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BP Algorithm的理解思路">
 <meta property="og:url" content="https://purelyvivid.github.io/2019/07/05/BPalgo/index.html">
@@ -87,7 +88,7 @@
 <meta property="og:description" content="本文淺顯直白的介紹反向傳播算法（BP 算法, The Back Propagation Algorithm）的理解思路, 計算過程和程式實現  我們考慮一個最簡單的layer,這個layer有兩個input $x_1, x_2$ 和1個output $y_1$: 則數學式可以寫成:$$ y_1 = w_{1}x_1+w_{2}x_2$$ 上式的$w$下標是跟著$x$在跑, 考慮到$y$可以擴展成$">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="https://i.imgur.com/eRqdjfG.png">
-<meta property="og:updated_time" content="2019-07-06T16:43:34.403Z">
+<meta property="og:updated_time" content="2019-07-15T12:03:49.028Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BP Algorithm的理解思路">
 <meta name="twitter:description" content="本文淺顯直白的介紹反向傳播算法（BP 算法, The Back Propagation Algorithm）的理解思路, 計算過程和程式實現  我們考慮一個最簡單的layer,這個layer有兩個input $x_1, x_2$ 和1個output $y_1$: 則數學式可以寫成:$$ y_1 = w_{1}x_1+w_{2}x_2$$ 上式的$w$下標是跟著$x$在跑, 考慮到$y$可以擴展成$">
@@ -188,6 +189,26 @@
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            關於
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分類
           </a>
         </li>
       
@@ -375,6 +396,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/back-propagation-gradient/" rel="tag"># back propagation, gradient</a>
+          
+        </div>
+      
 
       
       
@@ -452,7 +479,7 @@
               <img class="site-author-image" itemprop="image" src="/images/avatar_2016.jpeg" alt="Hui-Yu Huang">
             
               <p class="site-author-name" itemprop="name">Hui-Yu Huang</p>
-              <p class="site-description motion-element" itemprop="description">Machine Learning, Deep Learning, Graph Neural Network, Natural Language Processing</p>
+              <p class="site-description motion-element" itemprop="description">寫出我所理解的，才能裝得下更多\n，關於Machine Learning, Deep Learning, Graph Neural Network, Natural Language Processing的那些小事</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -475,7 +502,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">標籤</span>
                 
               </div>

@@ -88,8 +88,8 @@
 <meta property="og:description" content="要真正了解SVM (Support Vector Machines, 支持向量機), 必須了解什麼是核模型和核技巧, 假如只粗淺地知道它是一個最大化間隔(margin)的方法就太可惜了。以下從線性模型(Linear Model)開始, 逐步講到核模型(Kernel Model), 一窺其優雅之處。 線性模型(Linear Model)假如我們要學習一個函數$f$, 而假定這個函數的輸入(input">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="https://i.stack.imgur.com/UvH8A.png">
-<meta property="og:image" content="https://img-blog.csdn.net/20150521153347166">
-<meta property="og:updated_time" content="2019-07-15T11:11:44.555Z">
+<meta property="og:image" content="https://miro.medium.com/max/498/1*Ts2X2ow29QLDEeLvSE14Ew.png">
+<meta property="og:updated_time" content="2019-07-15T12:39:39.969Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="從線性模型(Linear Model)到核模型(Kernel Model)">
 <meta name="twitter:description" content="要真正了解SVM (Support Vector Machines, 支持向量機), 必須了解什麼是核模型和核技巧, 假如只粗淺地知道它是一個最大化間隔(margin)的方法就太可惜了。以下從線性模型(Linear Model)開始, 逐步講到核模型(Kernel Model), 一窺其優雅之處。 線性模型(Linear Model)假如我們要學習一個函數$f$, 而假定這個函數的輸入(input">
@@ -190,6 +190,26 @@
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首頁
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            關於
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分類
           </a>
         </li>
       
@@ -328,16 +348,16 @@
 <p>如果考慮連續傅立葉變換, 基函數可以無窮多個, 也就是說, 甚至可以將特徵從維度$d$投影到<strong>無窮維</strong>。</p>
 <h2 id="核模型-Kernel-Model"><a href="#核模型-Kernel-Model" class="headerlink" title="核模型(Kernel Model)"></a>核模型(Kernel Model)</h2><p>前面講到, 廣義線性模型將特徵$\mathbf{x}$透過$\phi$映射到更多維甚至無窮維的空間, 這時候就產生一個問題: <strong>如何設計最好的$\phi$</strong>?</p>
 <p>這是一個頗難的問題, 想想看, 先不要管基函數的形式怎麼設計(多項式?三角函數?指數?), 光是<strong>基函數的個數</strong>$b$就難以決定: 到底要投影到<strong>幾維</strong>才足夠複雜到可以解決任務, 且<strong>維度詛咒</strong>(curse of dimensionality)又不至於太過嚴重呢?</p>
-<p><img src="https://img-blog.csdn.net/20150521153347166" alt></p>
+<p><img src="https://miro.medium.com/max/498/1*Ts2X2ow29QLDEeLvSE14Ew.png" alt></p>
 <p>面對這種看起來毫無頭緒的問題, 這時候需要引入一些先驗假設, 而最好的先驗知識來源, 就是我們的<strong>輸入樣本</strong>(也就是數據)。</p>
 <p>試想, 假如數據中隱含某種模式或原則, 符合模式的那些樣本彼此之間應該距離較近; 或者換個方式說, 過去有出現過的樣本在特徵空間中的分布如果集中在某個位置, 我們可以假定下一個出現的樣本應該有比較大的機率出現在相同位置。</p>
 <p>因此, 想要從樣本中找規律, 我們有時會希望讓不同樣本之間可以產生一些互動, 此時通常會涉及到計算:$\phi(x_i)\phi(x_j)$, 也就是<strong>兩個特徵向量的內積</strong>, 而這個內積其實並不好計算, 尤其當特徵空間維度(基函數個數$b$)很大的時候。</p>
 <p>此時<strong>核函數</strong>(kernel function)$K$就能派上用場, 核函數是一個二元函數$K(\cdot,\cdot)$ 是一個定義<strong>內積</strong>的函數, 可被設計, 而<strong>核模型</strong>(Kernel Model)可以表示為<strong>核函數的線性組合</strong>。</p>
 <p>$$f_{\theta}=\sum_{j=1}^{n} \theta_{j}K(\mathbf{x},\mathbf{x}_ j)=\Theta\mathbf{K}$$</p>
-<p>其中$n$是樣本數, 注意: <strong>線性模型</strong>的基函數與樣本無關, 然而<strong>核模型</strong>設計時會用到輸入樣本${\mathbf{x}<em>{j}}</em>{j=1}^{n}$, 核函數構成的矩陣$\mathbf{K}$可以寫成:</p>
-<p>$$ \mathbf{K}=<br>{\left[ \begin{array}{ccc}<br>K(\mathbf{x}<em>1,\mathbf{x}_1),\ K(\mathbf{x}_2,\mathbf{x}_1), … ,\ K(\mathbf{x}_n,\mathbf{x}_1)\ \<br>K(\mathbf{x}_1,\mathbf{x}_2),\ K(\mathbf{x}_2,\mathbf{x}_2), … ,\ K(\mathbf{x}_n,\mathbf{x}_2)\ \<br>…,\ …, \ …\ \<br>K(\mathbf{x}_1,\mathbf{x}_n),\ K(\mathbf{x}_2,\mathbf{x}_n), … ,\ K(\mathbf{x}_n,\mathbf{x}_n)\ \<br>\end{array}\right ]}</em>{n \times n} $$</p>
+<p>其中$n$是樣本數, 注意: <strong>線性模型</strong>的基函數與樣本無關, 然而<strong>核模型</strong>設計時會用到輸入樣本 $ { \mathbf{x}_{j} } _{j=1}^{n}$ , 核函數構成的矩陣 $ \mathbf{K} $ 可以寫成:</p>
+<p>$$ \mathbf{K}= {\left[ \begin{array}{ccc} K( \mathbf{x}<em>1 , \mathbf{x}_1 ), \ K( \mathbf{x}_2,\mathbf{x}_1 ), … ,\ K(\mathbf{x}_n,\mathbf{x}_1)\ \ K( \mathbf{x}_1 , \mathbf{x}_2 ), \ K( \mathbf{x}_2,\mathbf{x}_2 ), … ,\ K(\mathbf{x}_n,\mathbf{x}_2)\ \ …,\ …, \ …\ \<br>K(\mathbf{x}_1,\mathbf{x}_n),\ K(\mathbf{x}_2,\mathbf{x}_n), … ,\ K(\mathbf{x}_n,\mathbf{x}_n)\ \ \end{array}\right ]}</em>{n \times n} $$</p>
 <p>值得注意的是, <strong>核模型的參數個數只與樣本數$n$有關, 與輸入的維度$d$無關</strong>, 這代表在樣本數不大($d&gt;&gt;n$)的情形下, 核模型可以避免<strong>維度災難</strong>。</p>
-<p>即使$n$很大, 只要取輸入樣本${\mathbf{x}<em>{j}}</em>{j=1}^{n}$的部分集合均值${\mathbf{c}<em>{j}}</em>{j=1}^{b}$來進行計算$(b&lt;&lt;n)$, 維度也能得到很好的控制。</p>
+<p>即使$n$很大, 只要取輸入樣本${\mathbf{x}<em>{j}}</em>{j=1}^{n}$的部分集合均值 $ { \mathbf{c}_{j} } _{j=1}^{b} $來進行計算 $ (b&lt;&lt;n) $ , 維度也能得到很好的控制。</p>
 <p>$$f_{\theta}=\sum_{j=1}^{b} \theta_{j}K(\mathbf{x},\mathbf{c}_ j)=\Theta\mathbf{K}_{b \times n}$$</p>
 <p>核模型並非線性模型, 但是線性模型可以視為核模型的特例。</p>
 <p>透過這種<strong>定義核函數</strong>的方法, 對基函數的<strong>內積</strong>進行特殊設計, 使得<strong>不須直接設計基函數</strong>, 透過定義核函數而隱式地(implicitly)定義了基函數, 這種方法稱為<strong>核技巧</strong>(kernel trick)或<strong>核方法</strong>(kernel method)。</p>
@@ -465,7 +485,7 @@
               <img class="site-author-image" itemprop="image" src="/images/avatar_2016.jpeg" alt="Hui-Yu Huang">
             
               <p class="site-author-name" itemprop="name">Hui-Yu Huang</p>
-              <p class="site-description motion-element" itemprop="description">Machine Learning, Deep Learning, Graph Neural Network, Natural Language Processing</p>
+              <p class="site-description motion-element" itemprop="description">寫出我所理解的，才能裝得下更多\n，關於Machine Learning, Deep Learning, Graph Neural Network, Natural Language Processing的那些小事</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -488,7 +508,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">標籤</span>
                 
               </div>
