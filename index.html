@@ -355,14 +355,14 @@
 <p>因此, 想要從樣本中找規律, 我們有時會希望讓不同樣本之間可以產生一些互動, 此時通常會涉及到計算:$\phi(x_i)\phi(x_j)$, 也就是<strong>兩個特徵向量的內積</strong>, 而這個內積其實並不好計算, 尤其當特徵空間維度(基函數個數$b$)很大的時候。</p>
 <p>此時<strong>核函數</strong>(kernel function)$K$就能派上用場, 核函數是一個二元函數$K(\cdot,\cdot)$ 是一個定義<strong>內積</strong>的函數, 可被設計, 而<strong>核模型</strong>(Kernel Model)可以表示為<strong>核函數的線性組合</strong>。</p>
 <p>$$f_{\theta}=\sum_{j=1}^{n} \theta_{j}K(\mathbf{x},\mathbf{x}_ j)=\Theta\mathbf{K}$$</p>
-<p>其中$n$是樣本數, 注意: <strong>線性模型</strong>的基函數與樣本無關, 然而<strong>核模型</strong>設計時會用到輸入樣本 $ { \mathbf{x}_{j} } _{j=1}^{n}$ , 核函數構成的矩陣 $ \mathbf{K} $ 可以寫成:</p>
+<p>其中$n$是樣本數, 注意: <strong>線性模型</strong>的基函數與樣本無關, 然而<strong>核模型</strong>設計時會用到輸入樣本 $ { \mathbf{x}_{j} } _{j=1}^{n} $ , 核函數構成的矩陣 $ \mathbf{K} $ 可以寫成:</p>
 <p>$$ \mathbf{K}= {\left[ \begin{array}{ccc} K( \mathbf{x}<em>1 , \mathbf{x}_1 ), \ K( \mathbf{x}_2,\mathbf{x}_1 ), … ,\ K(\mathbf{x}_n,\mathbf{x}_1)\ \ K( \mathbf{x}_1 , \mathbf{x}_2 ), \ K( \mathbf{x}_2,\mathbf{x}_2 ), … ,\ K(\mathbf{x}_n,\mathbf{x}_2)\ \ …,\ …, \ …\ \<br>K(\mathbf{x}_1,\mathbf{x}_n),\ K(\mathbf{x}_2,\mathbf{x}_n), … ,\ K(\mathbf{x}_n,\mathbf{x}_n)\ \ \end{array}\right ]}</em>{n \times n} $$</p>
 <p>值得注意的是, <strong>核模型的參數個數只與樣本數$n$有關, 與輸入的維度$d$無關</strong>, 這代表在樣本數不大($d&gt;&gt;n$)的情形下, 核模型可以避免<strong>維度災難</strong>。</p>
-<p>即使$n$很大, 只要取輸入樣本${\mathbf{x}<em>{j}}</em>{j=1}^{n}$的部分集合均值 $ { \mathbf{c}_{j} } _{j=1}^{b} $來進行計算 $ (b&lt;&lt;n) $ , 維度也能得到很好的控制。</p>
-<p>$$f_{\theta}=\sum_{j=1}^{b} \theta_{j}K(\mathbf{x},\mathbf{c}_ j)=\Theta\mathbf{K}_{b \times n}$$</p>
+<p>即使$n$很大, 只要取輸入樣本 $ { \mathbf{x}<em>{j} }</em>{j=1}^{n} $的部分集合均值 $ { \mathbf{c}_{j} } _{j=1}^{b} $來進行計算 $ (b&lt;&lt;n) $ , 維度也能得到很好的控制。</p>
+<p>$$f_{\theta}=\sum_{j=1}^{b} \theta_{j} K(\mathbf{x},\mathbf{c}_ j)=\Theta\mathbf{K}_{b \times n}$$</p>
 <p>核模型並非線性模型, 但是線性模型可以視為核模型的特例。</p>
 <p>透過這種<strong>定義核函數</strong>的方法, 對基函數的<strong>內積</strong>進行特殊設計, 使得<strong>不須直接設計基函數</strong>, 透過定義核函數而隱式地(implicitly)定義了基函數, 這種方法稱為<strong>核技巧</strong>(kernel trick)或<strong>核方法</strong>(kernel method)。</p>
-<p><strong>核函數</strong>的設計要滿足一些條件, 核函數必須是<strong>對稱函數</strong>, 且所構成的核矩陣$\mathbf{K}$必須要是<strong>半正定</strong>(證明可參考<a href="https://pdfs.semanticscholar.org/2862/e7b8fefb209cdb4c47a1643f2af71cd67b00.pdf" target="_blank" rel="noopener">Scholkopf and Smola, 2002</a>)</p>
+<p><strong>核函數</strong>的設計要滿足一些條件, 核函數必須是<strong>對稱函數</strong>, 且所構成的核矩陣$ \mathbf{K} $必須要是<strong>半正定</strong>(證明可參考<a href="https://pdfs.semanticscholar.org/2862/e7b8fefb209cdb4c47a1643f2af71cd67b00.pdf" target="_blank" rel="noopener">Scholkopf and Smola, 2002</a>)</p>
 <p>幾種常用的核函數如下:</p>
 <ol>
 <li>線性核</li>
