@@ -364,102 +364,95 @@
         <p>在深度學習領域的人，對<strong>捲積</strong>(Convolution)應該都不陌生，但不一定聽說過<strong>圖</strong>(Graph)也可以做Convolution。這篇文章對<strong>GCN</strong>(Graph Convolutional Network)做了概略的介紹。</p>
 <hr>
 <p>CNN的捲積不是數學定義上的連續捲積，而是一種定義的離散捲積。我們用這種捲積來處理圖像(image)，從圖像中提取特徵，並且透過神經網路來學習捲積的權重(weight)。以下所稱的捲積都是指這種局部的離散捲積。</p>
-<p><img src="https://pic4.zhimg.com/80/v2-394cb7b5f6dfb23dcddd838ebdee548b_hd.jpg" alt></p>
+<p><img src="https://pic4.zhimg.com/80/v2-394cb7b5f6dfb23dcddd838ebdee548b_hd.jpg"></p>
 <p>CNN捲積有一些特性，</p>
-<p>(1)平移不變性(shift-invariance)<br>(2)局部性(local connectivity)<br>(3)多尺度(multi-scale)</p>
+<p>(1)平移不變性(shift-invariance) (2)局部性(local connectivity) (3)多尺度(multi-scale)</p>
 <p>這些特性，暫且把它們稱作<strong>組合性(Compositionality)</strong>，讓CNN捲積只能處理在歐幾里德空間(Euclidean Structure)的數據。</p>
-<p><img src="https://cdn-images-1.medium.com/max/1200/1*1VJDP6qDY9-ExTuQVEOlVg.gif" alt></p>
+<p><img src="https://cdn-images-1.medium.com/max/1200/1*1VJDP6qDY9-ExTuQVEOlVg.gif"></p>
 <p>什麼數據是Euclidean Structure的數據呢？最經典的就是影像(image)，影片(video)和音頻(speech/voice)，自然語言文本(text)透過特殊處理，也可以固定維度，投影到歐幾里德空間來操作。</p>
 <p>然而，有一些數據結構是<strong>Non-Euclidean</strong>的，例如:</p>
 <ul>
 <li><strong>生物/化學分子 Chemical/Biological Graphs</strong></li>
 </ul>
-<p><img src="https://pic2.zhimg.com/80/v2-4a3967e884e413c9d0c5e10af79884c7_hd.jpg" alt></p>
+<p><img src="https://pic2.zhimg.com/80/v2-4a3967e884e413c9d0c5e10af79884c7_hd.jpg"></p>
 <ul>
-<li><strong>Citation Networks / Social Networks</strong> </li>
+<li><strong>Citation Networks / Social Networks</strong></li>
 </ul>
-<p><img src="https://i.imgur.com/gH7YZra.jpg" alt></p>
+<p><img src="https://i.imgur.com/gH7YZra.jpg"></p>
 <ul>
 <li><strong>Unstructured Graphs</strong>: 例如<strong>3D點雲</strong>, 或者是<strong>半監督學習</strong></li>
 </ul>
-<p><img src="http://paradise.caltech.edu/~yli/software/pceditor/3dselect2.png" alt></p>
-<p><img src="https://cdn-images-1.medium.com/max/1600/1*IPmyksaiYuo0fflQSUB4BQ.png" alt></p>
-<p>Non-Euclidean的數據，大致上可以當作<strong>圖</strong>(Graph)來理解。也就是可以理解成$G=(V,E)$，由頂點(vertex)和邊(edge)所構成的一種資料格式。</p>
+<p><img src="http://paradise.caltech.edu/~yli/software/pceditor/3dselect2.png"></p>
+<p><img src="https://cdn-images-1.medium.com/max/1600/1*IPmyksaiYuo0fflQSUB4BQ.png"></p>
+<p>Non-Euclidean的數據，大致上可以當作<strong>圖</strong>(Graph)來理解。也就是可以理解成<span class="math inline">\(G=(V,E)\)</span>，由頂點(vertex)和邊(edge)所構成的一種資料格式。</p>
 <p><strong>Euclidean數據可以當作是Non-Euclidean的一種特例</strong>。因此對Non-Euclidean理解和處理，可以在Euclidean數據上通用，這就是為什麼Non-Euclidean數據的表示法學習有其重要性。</p>
-<p><img src="https://i.imgur.com/VVYfDyx.png" alt></p>
+<p><img src="https://i.imgur.com/VVYfDyx.png"></p>
 <p>對2D Convolution來說，Graph Convolution的想法來自於把在<strong>圖像域</strong>(image domain)運作得很好的2D捲積神經網路方法，拿到<strong>圖域</strong>(graph domain)來使用。</p>
 <hr>
 <p>要了解圖的Convolution，要先了解<strong>Convolution本質上是一種aggregation操作</strong>，它是一種局部加權平均的運算。</p>
-<p>對圖的頂點(vertex)來說，局部指的是它的鄰居，而它的鄰居由邊(edge)的存在與否，綜合邊的權重(weight)大小去定義。簡單起見，把有邊(edge)的權重都定為$1$，沒邊(edge)的權重都定為$0$。</p>
-<p>為了探討圖的性質，我們用<strong>度矩陣</strong>(degree matrix)$D$ 和 <strong>鄰居矩陣</strong>(adjacency matrix)$A$來表示一個圖。度矩陣是一個對角矩陣(diagonal matrix)，度矩陣對角線上的值就是該頂點連接著幾條邊，也就是鄰居矩陣的<strong>列和</strong>。</p>
-<p>假如是無向圖，鄰居矩陣是對稱矩陣(symmetric matrix)。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">D = np.sum(A, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.imgur.com/sJHABf0.png" alt></p>
-<p>另外圖論(graph theory)還定義一個東西叫做<strong>Laplacian Matrix</strong> $L$，它最簡單的定義是$D-A$。在數學及物理中，Laplacian或稱Laplace operator(拉普拉斯算子)是歐幾里得空間中的一個函數的<strong>梯度的散度</strong>給出的微分算子，通常寫成 $\Delta$、$\nabla^2$ 或 $\nabla \cdot \nabla$。可以粗糙的視為歐幾里得空間中二次微分操作。</p>
+<p>對圖的頂點(vertex)來說，局部指的是它的鄰居，而它的鄰居由邊(edge)的存在與否，綜合邊的權重(weight)大小去定義。簡單起見，把有邊(edge)的權重都定為<span class="math inline">\(1\)</span>，沒邊(edge)的權重都定為<span class="math inline">\(0\)</span>。</p>
+<p>為了探討圖的性質，我們用<strong>度矩陣</strong>(degree matrix)<span class="math inline">\(D\)</span> 和 <strong>鄰居矩陣</strong>(adjacency matrix)<span class="math inline">\(A\)</span>來表示一個圖。度矩陣是一個對角矩陣(diagonal matrix)，度矩陣對角線上的值就是該頂點連接著幾條邊，也就是鄰居矩陣的<strong>列和</strong>。</p>
+<p>假如是無向圖，鄰居矩陣是對稱矩陣(symmetric matrix)。 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">D = np.sum(A, <span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://i.imgur.com/sJHABf0.png"></p>
+<p>另外圖論(graph theory)還定義一個東西叫做<strong>Laplacian Matrix</strong> <span class="math inline">\(L\)</span>，它最簡單的定義是<span class="math inline">\(D-A\)</span>。在數學及物理中，Laplacian或稱Laplace operator(拉普拉斯算子)是歐幾里得空間中的一個函數的<strong>梯度的散度</strong>給出的微分算子，通常寫成 <span class="math inline">\(\Delta\)</span>、<span class="math inline">\(\nabla^2\)</span> 或 <span class="math inline">\(\nabla \cdot \nabla\)</span>。可以粗糙的視為歐幾里得空間中二次微分操作。</p>
 <p><a href="https://www.zhihu.com/question/54504471/answer/630639025" target="_blank" rel="noopener">Laplacian物理上的解釋可以是能量的流失或是物質擴散</a>，放在圖論上來說，即是該頂點<strong>信息</strong>(message)<strong>傳播</strong>(propagation)。</p>
-<p>圖卷積神經網路(GCN)的<strong>單層</strong>操作，則可以(但不一定要)定義成：<br>$$Y=LX$$</p>
-<p>因為圖的Laplacian Matrix最簡單的定義是$L=D-A$：<br>$$Y=LX=DX-AX$$</p>
-<p>對單一節點來說，式中的 $AX$ 可以視為本次操作(每單位時間)鄰居預計要從我身上拿走的訊息量。 $DX$ 可以視為是本次操作<strong>每個節點尚未進行傳播前，本來擁有的訊息量</strong>，即是<strong>上次操作</strong>(上一個單位時間)每個頂點從它的鄰居頂點取得的訊息量。兩者相減，就是本次操作後訊息傳播的狀況。</p>
+<p>圖卷積神經網路(GCN)的<strong>單層</strong>操作，則可以(但不一定要)定義成： <span class="math display">\[Y=LX\]</span></p>
+<p>因為圖的Laplacian Matrix最簡單的定義是<span class="math inline">\(L=D-A\)</span>： <span class="math display">\[Y=LX=DX-AX\]</span></p>
+<p>對單一節點來說，式中的 <span class="math inline">\(AX\)</span> 可以視為本次操作(每單位時間)鄰居預計要從我身上拿走的訊息量。 <span class="math inline">\(DX\)</span> 可以視為是本次操作<strong>每個節點尚未進行傳播前，本來擁有的訊息量</strong>，即是<strong>上次操作</strong>(上一個單位時間)每個頂點從它的鄰居頂點取得的訊息量。兩者相減，就是本次操作後訊息傳播的狀況。</p>
 <p>我們用程式碼來了解一下圖的訊息傳遞：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定義鄰居矩陣A，故意使它不對稱，有向圖比較容易看到訊息傳遞的狀況</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">A = np.matrix([</span><br><span class="line">    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>], </span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>]],</span><br><span class="line">    dtype=float</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 畫圖程式(optional)</span></span><br><span class="line"><span class="keyword">import</span> networkx <span class="keyword">as</span> nx</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">G=nx.DiGraph(A)</span><br><span class="line">nx.draw(G, with_labels=<span class="literal">True</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.imgur.com/lWAHzMi.png" alt><br>這個有向圖可以理解為，每次的$L$操作，每個節點會依照箭頭指出的方向去提供每個鄰居節點它所要求攜帶的訊息。</p>
+<p><img src="https://i.imgur.com/lWAHzMi.png"> 這個有向圖可以理解為，每次的<span class="math inline">\(L\)</span>操作，每個節點會依照箭頭指出的方向去提供每個鄰居節點它所要求攜帶的訊息。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定義初始特徵</span></span><br><span class="line">X = np.matrix([[ <span class="number">100.</span>, <span class="number">-100.</span>],</span><br><span class="line">                [ <span class="number">1.</span>, <span class="number">-1.</span>],</span><br><span class="line">                [ <span class="number">2.</span>, <span class="number">-2.</span>],</span><br><span class="line">                [ <span class="number">3.</span>, <span class="number">-3.</span>]])</span><br><span class="line"></span><br><span class="line">A * X</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#輸出：</span><br><span class="line">matrix([[   1.,   -1.],</span><br><span class="line">        [   5.,   -5.],</span><br><span class="line">        [   0.,    0.],</span><br><span class="line">        [ 102., -102.]])</span><br></pre></td></tr></table></figure>
-
 <p>從以上例子就可以明顯看出，因為label=3的節點提供訊息給label=0和label=2的節點，結果得到一個很大的訊息更新。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">D = np.diag(np.array(np.sum(A, <span class="number">1</span>)).flatten())</span><br><span class="line">L = D-A</span><br><span class="line">L*X</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#輸出：</span><br><span class="line">matrix([[ 99., -99.],</span><br><span class="line">        [ -3.,   3.],</span><br><span class="line">        [  0.,   0.],</span><br><span class="line">        [-96.,  96.]])</span><br></pre></td></tr></table></figure>
-
 <p>結果label=3的節點更新完後，有了很大的變化。</p>
 <p>我們這時候應該也發現了一些問題。由於圖中沒有自環，訊息只能被鄰居不斷取走，而沒有因應自身訊息做調整。這就像是預估一個人薪水多高時，只考慮他的朋友薪水多高，而沒有把該人的自身條件考慮進去，顯然不太合理。因此，因應任務需要，可以考慮增加自環。</p>
-<p>$$\hat{A} = A+I$$</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 增加自環</span></span><br><span class="line">I = np.diag([<span class="number">1</span>]*A.shape[<span class="number">0</span>])</span><br><span class="line">A_hat = A + I</span><br><span class="line">A_hat</span><br></pre></td></tr></table></figure>
-
+<p><span class="math display">\[\hat{A} = A+I\]</span> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 增加自環</span></span><br><span class="line">I = np.diag([<span class="number">1</span>]*A.shape[<span class="number">0</span>])</span><br><span class="line">A_hat = A + I</span><br><span class="line">A_hat</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#輸出：</span><br><span class="line">matrix([[1., 1., 0., 0.],</span><br><span class="line">        [0., 1., 1., 1.],</span><br><span class="line">        [0., 0., 1., 0.],</span><br><span class="line">        [1., 0., 1., 1.]])</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A_hat * X</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#輸出：</span><br><span class="line">matrix([[ 101., -101.],</span><br><span class="line">        [   6.,   -6.],</span><br><span class="line">        [   2.,   -2.],</span><br><span class="line">        [ 105., -105.]])</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">D_hat = np.diag(np.array(np.sum(A, <span class="number">1</span>)).flatten())</span><br><span class="line">L_hat = D_hat-A_hat</span><br><span class="line">L_hat*X</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#輸出：</span><br><span class="line">matrix([[ -1.,   1.],</span><br><span class="line">        [ -4.,   4.],</span><br><span class="line">        [ -2.,   2.],</span><br><span class="line">        [-99.,  99.]])</span><br></pre></td></tr></table></figure>
-
-<p>以上的傳播矩陣，不管是$A$還是$\hat{A}$還是$L$，與convolution相似的地方在於，它們都是一種<strong>局部的aggregation操作</strong>。然而，convolution的局部連接數是固定的，這裡卻不是這樣，每個頂點鄰居數目可能都不同。</p>
-<p>所以，不管是$A$還是$\hat{A}$還是$L$，都還需要進行歸一化處理。以免偏好鄰居較多的節點，讓鄰居較多的節點傳播比較多的訊息量。歸一化處理的方法有兩種：(1)算術平均(2)幾何平均</p>
-<p>於是多定義了兩種<strong>Laplacian Matrix</strong><br>(1)算術平均<br>$$L^{rw}=D^{-1}L$$<br>(2)幾何平均<br>$$L^{sym}=D^{-0.5}LD^{-0.5}$$ </p>
-<p>其中，幾何平均受極端值影響較小，$L^{sym}$是GCN中較為常用的 Laplacian Matrix 。</p>
-<p>故，圖卷積神經網路(GCN)的<strong>單層</strong>操作，也可以(但不一定要)定義成：<br>$$Y=L^{sym}X$$</p>
+<p>以上的傳播矩陣，不管是<span class="math inline">\(A\)</span>還是<span class="math inline">\(\hat{A}\)</span>還是<span class="math inline">\(L\)</span>，與convolution相似的地方在於，它們都是一種<strong>局部的aggregation操作</strong>。然而，convolution的局部連接數是固定的，這裡卻不是這樣，每個頂點鄰居數目可能都不同。</p>
+<p>所以，不管是<span class="math inline">\(A\)</span>還是<span class="math inline">\(\hat{A}\)</span>還是<span class="math inline">\(L\)</span>，都還需要進行歸一化處理。以免偏好鄰居較多的節點，讓鄰居較多的節點傳播比較多的訊息量。歸一化處理的方法有兩種：(1)算術平均(2)幾何平均</p>
+<p>於是多定義了兩種<strong>Laplacian Matrix</strong> (1)算術平均 <span class="math display">\[L^{rw}=D^{-1}L\]</span> (2)幾何平均 <span class="math display">\[L^{sym}=D^{-0.5}LD^{-0.5}\]</span></p>
+<p>其中，幾何平均受極端值影響較小，<span class="math inline">\(L^{sym}\)</span>是GCN中較為常用的 Laplacian Matrix 。</p>
+<p>故，圖卷積神經網路(GCN)的<strong>單層</strong>操作，也可以(但不一定要)定義成： <span class="math display">\[Y=L^{sym}X\]</span></p>
 <hr>
-<h2 id="Eigendecomposition-Spectral-decomposition-of-Laplacian-Matrix"><a href="#Eigendecomposition-Spectral-decomposition-of-Laplacian-Matrix" class="headerlink" title="Eigendecomposition / Spectral decomposition of Laplacian Matrix"></a>Eigendecomposition / Spectral decomposition of Laplacian Matrix</h2><p>假設為無向圖，此時$L^{sym}$ (以下簡稱$L$) 是可以被對角化的 (原因不詳述)</p>
-<p><img src="https://www.zhihu.com/equation?tex=+L%3D+U%5Cleft%28%5Cbegin%7Bmatrix%7D%5Clambda_1+%26+%5C%5C%26%5Cddots+%5C%5C+%26%26%5Clambda_n+%5Cend%7Bmatrix%7D%5Cright%29+U%5E%7B-1%7D" alt></p>
-<p>由於$U$是正交矩陣，$UU^T=I$，$U^T=U^{-1}$</p>
-<p><img src="https://www.zhihu.com/equation?tex=L%3D+U%5Cleft%28%5Cbegin%7Bmatrix%7D%5Clambda_1+%26+%5C%5C%26%5Cddots+%5C%5C+%26%26%5Clambda_n+%5Cend%7Bmatrix%7D%5Cright%29+U%5E%7BT%7D" alt></p>
-<p>其中，$U$是已知的，$\lambda_l$ <strong>特徵值</strong>是未知要求取的。但我們並不直接去求或是去優化$\lambda_l$ 。</p>
-<p>對一個捲積函數 $h$ 而言，可以用<strong>傅立葉轉換的卷積定理</strong><br><img src="https://www.zhihu.com/equation?tex=%28f%2Ah%29_G%3DU%28%28U%5ETh%29%5Codot%28U%5ETf%29%29+%5Cqquad%282%29" alt></p>
+<h2 id="eigendecomposition-spectral-decomposition-of-laplacian-matrix">Eigendecomposition / Spectral decomposition of Laplacian Matrix</h2>
+<p>假設為無向圖，此時<span class="math inline">\(L^{sym}\)</span> (以下簡稱<span class="math inline">\(L\)</span>) 是可以被對角化的 (原因不詳述)</p>
+<p><img src="https://www.zhihu.com/equation?tex=+L%3D+U%5Cleft%28%5Cbegin%7Bmatrix%7D%5Clambda_1+%26+%5C%5C%26%5Cddots+%5C%5C+%26%26%5Clambda_n+%5Cend%7Bmatrix%7D%5Cright%29+U%5E%7B-1%7D"></p>
+<p>由於<span class="math inline">\(U\)</span>是正交矩陣，<span class="math inline">\(UU^T=I\)</span>，<span class="math inline">\(U^T=U^{-1}\)</span></p>
+<p><img src="https://www.zhihu.com/equation?tex=L%3D+U%5Cleft%28%5Cbegin%7Bmatrix%7D%5Clambda_1+%26+%5C%5C%26%5Cddots+%5C%5C+%26%26%5Clambda_n+%5Cend%7Bmatrix%7D%5Cright%29+U%5E%7BT%7D"></p>
+<p>其中，<span class="math inline">\(U\)</span>是已知的，<span class="math inline">\(\lambda_l\)</span> <strong>特徵值</strong>是未知要求取的。但我們並不直接去求或是去優化<span class="math inline">\(\lambda_l\)</span> 。</p>
+<p>對一個捲積函數 <span class="math inline">\(h\)</span> 而言，可以用<strong>傅立葉轉換的卷積定理</strong> <img src="https://www.zhihu.com/equation?tex=%28f%2Ah%29_G%3DU%28%28U%5ETh%29%5Codot%28U%5ETf%29%29+%5Cqquad%282%29"></p>
 <p>去證明(原因不詳述)，捲積後的結果為：</p>
-<p><img src="https://www.zhihu.com/equation?tex=%28f%2Ah%29_G%3D+U%5Cleft%28%5Cbegin%7Bmatrix%7D%5Chat+h%28%5Clambda_1%29+%26+%5C%5C%26%5Cddots+%5C%5C+%26%26%5Chat+h%28%5Clambda_n%29+%5Cend%7Bmatrix%7D%5Cright%29+U%5ETf+%5Cqquad%281%29" alt></p>
-<p>其中$\hat{h}(\lambda_{l})$要設計成:</p>
-<p><img src="https://www.zhihu.com/equation?tex=%5Chat%7Bh%7D%28%5Clambda_l%29%3D%5Csum_%7Bi%3D1%7D%5E%7BN%7D%7Bh%28i%29+u_l%5E%2A%28i%29%7D" alt><br>其中$u^{<em>}$是*</em>傅立葉轉換正交特徵向量**的共軛轉置</p>
-<h2 id="第一代GCN"><a href="#第一代GCN" class="headerlink" title="第一代GCN"></a>第一代GCN</h2><p><a href="https://arxiv.org/abs/1312.6203" target="_blank" rel="noopener">Spectral Networks and Locally Connected Networks on Graphs(2013)</a></p>
-<p>直接令 $\theta_l=\hat{h}(\lambda_{l})$ </p>
+<p><img src="https://www.zhihu.com/equation?tex=%28f%2Ah%29_G%3D+U%5Cleft%28%5Cbegin%7Bmatrix%7D%5Chat+h%28%5Clambda_1%29+%26+%5C%5C%26%5Cddots+%5C%5C+%26%26%5Chat+h%28%5Clambda_n%29+%5Cend%7Bmatrix%7D%5Cright%29+U%5ETf+%5Cqquad%281%29"></p>
+<p>其中<span class="math inline">\(\hat{h}(\lambda_{l})\)</span>要設計成:</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Chat%7Bh%7D%28%5Clambda_l%29%3D%5Csum_%7Bi%3D1%7D%5E%7BN%7D%7Bh%28i%29+u_l%5E%2A%28i%29%7D"> 其中<span class="math inline">\(u^{*}\)</span>是<strong>傅立葉轉換正交特徵向量</strong>的共軛轉置</p>
+<h2 id="第一代gcn">第一代GCN</h2>
+<p><a href="https://arxiv.org/abs/1312.6203" target="_blank" rel="noopener">Spectral Networks and Locally Connected Networks on Graphs(2013)</a></p>
+<p>直接令 <span class="math inline">\(\theta_l=\hat{h}(\lambda_{l})\)</span></p>
 <p>GCN的<strong>單層</strong>操作:</p>
-<p><img src="https://www.zhihu.com/equation?tex=+y_%7Boutput%7D%3D%5Csigma+%5Cleft%28U+g_%5Ctheta%28%5CLambda%29+U%5ET+x+%5Cright%29+%5Cqquad%283%29" alt><br><img src="https://www.zhihu.com/equation?tex=+g_%5Ctheta%28%5CLambda%29%3D%5Cleft%28%5Cbegin%7Bmatrix%7D%5Ctheta_1+%26%5C%5C%26%5Cddots+%5C%5C+%26%26%5Ctheta_n+%5Cend%7Bmatrix%7D%5Cright%29" alt></p>
+<p><img src="https://www.zhihu.com/equation?tex=+y_%7Boutput%7D%3D%5Csigma+%5Cleft%28U+g_%5Ctheta%28%5CLambda%29+U%5ET+x+%5Cright%29+%5Cqquad%283%29"> <img src="https://www.zhihu.com/equation?tex=+g_%5Ctheta%28%5CLambda%29%3D%5Cleft%28%5Cbegin%7Bmatrix%7D%5Ctheta_1+%26%5C%5C%26%5Cddots+%5C%5C+%26%26%5Ctheta_n+%5Cend%7Bmatrix%7D%5Cright%29"></p>
 <p>第一代圖捲積跟一般CNN卷積的差異：</p>
-<p>(1) 卷積核(kernel)只在主對角線上，並不需要是二維的，卷積核個數與頂點數(n)相同<br>(2) 卷積核(kernel)在主對角線上的矩陣需要經過離散傅立葉矩陣轉換($U$,$U^T$)</p>
-<h2 id="第二代GCN"><a href="#第二代GCN" class="headerlink" title="第二代GCN"></a>第二代GCN</h2><p><a href="http://papers.nips.cc/paper/6081-convolutional-neural-networks-on-graphs-with-fast-localized-spectral-filtering" target="_blank" rel="noopener">Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering(2016)</a></p>
-<p>設計：<br>$\hat{h}(\lambda_{l})$=<img src="https://www.zhihu.com/equation?tex=%5Csum_%7Bj%3D0%7D%5EK+%5Calpha_j+%5Clambda%5Ej_l" alt><br>K是K-hop neighbor</p>
-<p>可以導出GCN的<strong>單層</strong>操作（推導過程略）:<br><img src="https://www.zhihu.com/equation?tex=+y_%7Boutput%7D%3D%5Csigma+%5Cleft%28+%5Csum_%7Bj%3D0%7D%5EK+%5Calpha_j+L%5Ej+x+%5Cright%29+%5Cqquad%285%29" alt><br>卷積核(kernel)是$\alpha_j$</p>
+<ol type="1">
+<li>卷積核(kernel)只在主對角線上，並不需要是二維的，卷積核個數與頂點數(n)相同</li>
+<li>卷積核(kernel)在主對角線上的矩陣需要經過離散傅立葉矩陣轉換(<span class="math inline">\(U\)</span>,<span class="math inline">\(U^T\)</span>)</li>
+</ol>
+<h2 id="第二代gcn">第二代GCN</h2>
+<p><a href="http://papers.nips.cc/paper/6081-convolutional-neural-networks-on-graphs-with-fast-localized-spectral-filtering" target="_blank" rel="noopener">Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering(2016)</a></p>
+<p>設計： <span class="math inline">\(\hat{h}(\lambda_{l})\)</span>=<img src="https://www.zhihu.com/equation?tex=%5Csum_%7Bj%3D0%7D%5EK+%5Calpha_j+%5Clambda%5Ej_l"> K是K-hop neighbor</p>
+<p>可以導出GCN的<strong>單層</strong>操作（推導過程略）: <img src="https://www.zhihu.com/equation?tex=+y_%7Boutput%7D%3D%5Csigma+%5Cleft%28+%5Csum_%7Bj%3D0%7D%5EK+%5Calpha_j+L%5Ej+x+%5Cright%29+%5Cqquad%285%29"> 卷積核(kernel)是<span class="math inline">\(\alpha_j\)</span></p>
 <p>第二代圖捲積跟第一代圖捲積的差異：</p>
-<p>(1) 第一代沒有局部性，卷積核個數與頂點數(n)相同，第二代只有K個參數，計算複雜度降低很多</p>
-<p>(2) 第一代每次向前傳播都要計算一次 $U\ diag(\theta)\ U^T$ 三者的乘積，第二代直接拿$L$乘上$\alpha_j$，計算簡單一些，但複雜度仍是$O(n^2)$</p>
-<p>(3) 第二代有Parameter Sharing的部份</p>
+<ol type="1">
+<li><p>第一代沒有局部性，卷積核個數與頂點數(n)相同，第二代只有K個參數，計算複雜度降低很多</p></li>
+<li><p>第一代每次向前傳播都要計算一次 <span class="math inline">\(U\ diag(\theta)\ U^T\)</span> 三者的乘積，第二代直接拿<span class="math inline">\(L\)</span>乘上<span class="math inline">\(\alpha_j\)</span>，計算簡單一些，但複雜度仍是<span class="math inline">\(O(n^2)\)</span></p></li>
+<li><p>第二代有Parameter Sharing的部份</p></li>
+</ol>
 <hr>
 <p>對GCN的介紹暫時到這邊，有空再來分享paper和程式碼。實際上程式碼並沒有理論來的那麼複雜，用numpy自己刻一個是絕對可行的，假如用deep learning套件，實際上也只有用到fc layer。基於PyTorch有非常好用且完整的套件<strong>torch_geometric</strong>，雖無法handle大圖，但拿來上手可以很快進入狀況。</p>
 <hr>
@@ -467,14 +460,10 @@
 <hr>
 <p>Reference:</p>
 <ul>
-<li><p>[A Comprehensive Survey on Graph Neural](Networks <a href="https://arxiv.org/pdf/1901.00596.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/1901.00596.pdf</a>)</p>
-</li>
-<li><p><a href="https://www.zhihu.com/question/54504471" target="_blank" rel="noopener">如何理解 Graph Convolutional Network（GCN）？</a></p>
-</li>
-<li><p><a href="https://arxiv.org/abs/1312.6203" target="_blank" rel="noopener">Spectral Networks and Locally Connected Networks on Graphs(2013)</a></p>
-</li>
-<li><p><a href="http://papers.nips.cc/paper/6081-convolutional-neural-networks-on-graphs-with-fast-localized-spectral-filtering" target="_blank" rel="noopener">Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering(2016)</a></p>
-</li>
+<li><p><a href="Networks%20https://arxiv.org/pdf/1901.00596.pdf">A Comprehensive Survey on Graph Neural</a></p></li>
+<li><p><a href="https://www.zhihu.com/question/54504471" target="_blank" rel="noopener">如何理解 Graph Convolutional Network（GCN）？</a></p></li>
+<li><p><a href="https://arxiv.org/abs/1312.6203" target="_blank" rel="noopener">Spectral Networks and Locally Connected Networks on Graphs(2013)</a></p></li>
+<li><p><a href="http://papers.nips.cc/paper/6081-convolutional-neural-networks-on-graphs-with-fast-localized-spectral-filtering" target="_blank" rel="noopener">Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering(2016)</a></p></li>
 </ul>
 
       
@@ -653,7 +642,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Eigendecomposition-Spectral-decomposition-of-Laplacian-Matrix"><span class="nav-number">1.</span> <span class="nav-text">Eigendecomposition / Spectral decomposition of Laplacian Matrix</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一代GCN"><span class="nav-number">2.</span> <span class="nav-text">第一代GCN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二代GCN"><span class="nav-number">3.</span> <span class="nav-text">第二代GCN</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#eigendecomposition-spectral-decomposition-of-laplacian-matrix"><span class="nav-number">1.</span> <span class="nav-text">Eigendecomposition / Spectral decomposition of Laplacian Matrix</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一代gcn"><span class="nav-number">2.</span> <span class="nav-text">第一代GCN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二代gcn"><span class="nav-number">3.</span> <span class="nav-text">第二代GCN</span></a></li></ol></div>
             
 
           </div>

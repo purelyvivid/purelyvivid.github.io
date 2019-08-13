@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="本文淺顯直白的介紹反向傳播算法（BP 算法, The Back Propagation Algorithm）的理解思路, 計算過程和程式實現  我們考慮一個最簡單的layer,這個layer有兩個input $x_1, x_2$ 和1個output $y_1$: 則數學式可以寫成:$$ y_1 = w_{1}x_1+w_{2}x_2$$ 上式的$w$下標是跟著$x$在跑, 考慮到$y$可以擴展成$">
+<meta name="description" content="本文淺顯直白的介紹反向傳播算法（BP 算法, The Back Propagation Algorithm）的理解思路, 計算過程和程式實現  我們考慮一個最簡單的layer,這個layer有兩個input \(x_1, x_2\) 和1個output \(y_1\):  則數學式可以寫成: \[ y_1 = w_{1}x_1+w_{2}x_2\] 上式的\(w\)下標是跟著\(x\)在跑, 考慮">
 <meta name="keywords" content="Machine Learning, Deep Learning, Graph Neural Network, Natural Language Processing">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BP Algorithm的理解思路">
 <meta property="og:url" content="https://purelyvivid.github.io/2019/07/05/BPalgo/index.html">
 <meta property="og:site_name" content="Hui-Yu Huang&#39;s Blog">
-<meta property="og:description" content="本文淺顯直白的介紹反向傳播算法（BP 算法, The Back Propagation Algorithm）的理解思路, 計算過程和程式實現  我們考慮一個最簡單的layer,這個layer有兩個input $x_1, x_2$ 和1個output $y_1$: 則數學式可以寫成:$$ y_1 = w_{1}x_1+w_{2}x_2$$ 上式的$w$下標是跟著$x$在跑, 考慮到$y$可以擴展成$">
+<meta property="og:description" content="本文淺顯直白的介紹反向傳播算法（BP 算法, The Back Propagation Algorithm）的理解思路, 計算過程和程式實現  我們考慮一個最簡單的layer,這個layer有兩個input \(x_1, x_2\) 和1個output \(y_1\):  則數學式可以寫成: \[ y_1 = w_{1}x_1+w_{2}x_2\] 上式的\(w\)下標是跟著\(x\)在跑, 考慮">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="https://i.imgur.com/eRqdjfG.png">
 <meta property="og:updated_time" content="2019-07-15T13:06:22.500Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BP Algorithm的理解思路">
-<meta name="twitter:description" content="本文淺顯直白的介紹反向傳播算法（BP 算法, The Back Propagation Algorithm）的理解思路, 計算過程和程式實現  我們考慮一個最簡單的layer,這個layer有兩個input $x_1, x_2$ 和1個output $y_1$: 則數學式可以寫成:$$ y_1 = w_{1}x_1+w_{2}x_2$$ 上式的$w$下標是跟著$x$在跑, 考慮到$y$可以擴展成$">
+<meta name="twitter:description" content="本文淺顯直白的介紹反向傳播算法（BP 算法, The Back Propagation Algorithm）的理解思路, 計算過程和程式實現  我們考慮一個最簡單的layer,這個layer有兩個input \(x_1, x_2\) 和1個output \(y_1\):  則數學式可以寫成: \[ y_1 = w_{1}x_1+w_{2}x_2\] 上式的\(w\)下標是跟著\(x\)在跑, 考慮">
 <meta name="twitter:image" content="https://i.imgur.com/eRqdjfG.png">
 
 
@@ -346,63 +346,72 @@
       
         <p>本文淺顯直白的介紹反向傳播算法（BP 算法, The Back Propagation Algorithm）的理解思路, 計算過程和程式實現</p>
 <hr>
-<p>我們考慮一個最簡單的layer,這個layer有兩個input $x_1, x_2$ 和1個output $y_1$:<br><img src="https://i.imgur.com/eRqdjfG.png" alt></p>
-<p>則數學式可以寫成:<br>$$ y_1 = w_{1}x_1+w_{2}x_2$$</p>
-<p>上式的$w$下標是跟著$x$在跑, 考慮到$y$可以擴展成$y_j$(不只一個$y$), 我們改一下$w$的下標, 也把$y$的標號考慮進去:<br>$$ y_1 = w_{11}x_1+w_{12}x_2$$</p>
-<p>其中$w_{ji}$的第一個下標$j$是跟著$y$在跑, 而$i$是跟著$x$在跑, 整個式子可以寫成矩陣形式:<br>$$Y=WX$$</p>
-<p>其中令輸入$X$有$n$維, 輸出$Y$有$m$維:</p>
-<p>$$X=[x_1,\ x_2, … , x_i,\ …\ ,\ x_n\ ]^T$$</p>
-<p>$$Y=[y_1,\ y_2, … , y_j,\ …\ ,\ y_m\ ]^T$$</p>
-<p>$$ W=<br>{\left[ \begin{array}{ccc}<br>w_{11},\ w_{12}, … ,\ w_{1n}\ \<br>… , w_{ji}, … \<br>w_{m1},\ w_{m2}, … ,\ w_{mn}\ \<br>\end{array}\right ]} = { w_{ji} }_{m \times n}$$</p>
-<p>通常我們還會把上式加個<strong>偏置</strong>(bias) $B$:</p>
-<p>$$Y=WX+B$$</p>
-<p>$B$維度會和$Y$相同<br>$$B=[b_1,\ b_2, … , b_j,\ …\ ,\ b_m\ ]^T$$</p>
-<p>通常還會再加個可微分的激活函數$\sigma$來增加其非線性:</p>
-<p>$$Y=\sigma(WX+B)$$</p>
-<p>以上是”前饋”(forward)的部分</p>
+<p>我們考慮一個最簡單的layer,這個layer有兩個input <span class="math inline">\(x_1, x_2\)</span> 和1個output <span class="math inline">\(y_1\)</span>: <img src="https://i.imgur.com/eRqdjfG.png"></p>
+<p>則數學式可以寫成: <span class="math display">\[ y_1 = w_{1}x_1+w_{2}x_2\]</span></p>
+<p>上式的<span class="math inline">\(w\)</span>下標是跟著<span class="math inline">\(x\)</span>在跑, 考慮到<span class="math inline">\(y\)</span>可以擴展成<span class="math inline">\(y_j\)</span>(不只一個<span class="math inline">\(y\)</span>), 我們改一下<span class="math inline">\(w\)</span>的下標, 也把<span class="math inline">\(y\)</span>的標號考慮進去: <span class="math display">\[ y_1 = w_{11}x_1+w_{12}x_2\]</span></p>
+<p>其中<span class="math inline">\(w_{ji}\)</span>的第一個下標<span class="math inline">\(j\)</span>是跟著<span class="math inline">\(y\)</span>在跑, 而<span class="math inline">\(i\)</span>是跟著<span class="math inline">\(x\)</span>在跑, 整個式子可以寫成矩陣形式: <span class="math display">\[Y=WX\]</span></p>
+<p>其中令輸入<span class="math inline">\(X\)</span>有<span class="math inline">\(n\)</span>維, 輸出<span class="math inline">\(Y\)</span>有<span class="math inline">\(m\)</span>維:</p>
+<p><span class="math display">\[X=[x_1,\ x_2, ... , x_i,\ ...\ ,\ x_n\ ]^T\]</span></p>
+<p><span class="math display">\[Y=[y_1,\ y_2, ... , y_j,\ ...\ ,\ y_m\ ]^T\]</span></p>
+<p><span class="math display">\[ W= 
+{\left[ \begin{array}{ccc} 
+w_{11},\ w_{12}, ... ,\ w_{1n}\ \\
+... , w_{ji}, ... \\
+w_{m1},\ w_{m2}, ... ,\ w_{mn}\ \\
+\end{array}\right ]} = \{ w_{ji} \}_{m \times n}\]</span></p>
+<p>通常我們還會把上式加個<strong>偏置</strong>(bias) <span class="math inline">\(B\)</span>:</p>
+<p><span class="math display">\[Y=WX+B\]</span></p>
+<p><span class="math inline">\(B\)</span>維度會和<span class="math inline">\(Y\)</span>相同 <span class="math display">\[B=[b_1,\ b_2, ... , b_j,\ ...\ ,\ b_m\ ]^T\]</span></p>
+<p>通常還會再加個可微分的激活函數<span class="math inline">\(\sigma\)</span>來增加其非線性:</p>
+<p><span class="math display">\[Y=\sigma(WX+B)\]</span></p>
+<p>以上是&quot;前饋&quot;(forward)的部分</p>
 <hr>
-<p>接下來考慮”反向傳播”(backward)的部分,假設損失函數(loss function)$\mathbb{J}$ 有$d$維, 下標用$k$表示:</p>
-<p>$$ Assume\ lost function\ \mathbb{J}\ has\ dim\ d $$</p>
-<p>$$\mathbb{J}=[J_1,\ J_2, … , J_k,\ …\ ,\ J_d\ ]^T$$</p>
-<p>損失梯度(Gradient)要從輸出$Y$流回輸入$X$, 並流到$W$和$B$以進行權重和偏置的更新(update), 也就是可以把問題定義成:</p>
-<p>$$ Given\  \frac{\partial J_k}{\partial y_{j}} , find\ \frac{\partial J_k}{\partial w_{ji}},\ \frac{\partial J_k}{\partial b_j} , and\ \frac{\partial J_k}{\partial x_i}   $$</p>
-<p>梯度傳遞會用到微積分的<strong>鏈鎖率</strong>(Chain Rule), 為了方便起見我們多定義一個$Z$:</p>
-<p>$$ Z = WX+B $$</p>
-<p>$$ Y = \sigma (Z) $$</p>
-<p>$$Z=[z_1,\ z_2, … , z_j,\ …\ ,\ z_m\ ]^T$$</p>
-<p>可以發現, 上式和原本的$Y=\sigma(WX+B)$並沒有不同, 只是計算過程中間多一個$Z$</p>
-<p>定義輸出梯度(已知):<br>$$\nabla_{out} = \frac{\partial J_k}{\partial y_{j}}$$</p>
-<p>定義輸入梯度(待求):<br>$$\nabla_{in} = \frac{\partial J_k}{\partial x_{i}}$$</p>
+<p>接下來考慮&quot;反向傳播&quot;(backward)的部分,假設損失函數(loss function)<span class="math inline">\(\mathbb{J}\)</span> 有<span class="math inline">\(d\)</span>維, 下標用<span class="math inline">\(k\)</span>表示:</p>
+<p><span class="math display">\[ Assume\ lost function\ \mathbb{J}\ has\ dim\ d \]</span></p>
+<p><span class="math display">\[\mathbb{J}=[J_1,\ J_2, ... , J_k,\ ...\ ,\ J_d\ ]^T\]</span></p>
+<p>損失梯度(Gradient)要從輸出<span class="math inline">\(Y\)</span>流回輸入<span class="math inline">\(X\)</span>, 並流到<span class="math inline">\(W\)</span>和<span class="math inline">\(B\)</span>以進行權重和偏置的更新(update), 也就是可以把問題定義成:</p>
+<p><span class="math display">\[ Given\  \frac{\partial J_k}{\partial y_{j}} , find\ \frac{\partial J_k}{\partial w_{ji}},\ \frac{\partial J_k}{\partial b_j} \, and\ \frac{\partial J_k}{\partial x_i}   \]</span></p>
+<p>梯度傳遞會用到微積分的<strong>鏈鎖率</strong>(Chain Rule), 為了方便起見我們多定義一個<span class="math inline">\(Z\)</span>:</p>
+<p><span class="math display">\[ Z = WX+B \]</span></p>
+<p><span class="math display">\[ Y = \sigma (Z) \]</span></p>
+<p><span class="math display">\[Z=[z_1,\ z_2, ... , z_j,\ ...\ ,\ z_m\ ]^T\]</span></p>
+<p>可以發現, 上式和原本的<span class="math inline">\(Y=\sigma(WX+B)\)</span>並沒有不同, 只是計算過程中間多一個<span class="math inline">\(Z\)</span></p>
+<p>定義輸出梯度(已知): <span class="math display">\[\nabla_{out} = \frac{\partial J_k}{\partial y_{j}}\]</span></p>
+<p>定義輸入梯度(待求): <span class="math display">\[\nabla_{in} = \frac{\partial J_k}{\partial x_{i}}\]</span></p>
 <p>用鏈鎖率(Chain Rule)將待求的項目展開:</p>
-<p>$$ \frac{\partial J_k}{\partial w_{ji}} = \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  \frac{\partial z_j}{\partial w_{ji}} = G_{kj}\ \frac{\partial z_j}{\partial w_{ji}} \ \ …(1)$$</p>
-<p>$$ \frac{\partial J_k}{\partial b_{j}} =  \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  \frac{\partial z_j}{\partial b_{j}}  = G_{kj}\ \frac{\partial z_j}{\partial b_{j}}  \ \ …(2)$$ </p>
-<p>$$ \frac{\partial J_k}{\partial x_{i}}\ (\nabla_{in}) =  \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  \frac{\partial z_j}{\partial x_{i}}  = G_{kj}\ \frac{\partial z_j}{\partial x_{i}}  \ \ …(3)$$ </p>
-<p>上列各式重複$\frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}$的部分, 方便起見, 定義中介梯度$\mathbb{G}$:</p>
-<p>$$ \mathbb{G}\ =  \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  $$ </p>
-<p>$$ \mathbb{G}=<br>{\left[ \begin{array}{ccc}<br>G_{11},\ G_{12}, … ,\ G_{1m}\ \<br>… , G_{kj}, … \<br>G_{k1},\ G_{k2}, … ,\ G_{dm}\ \<br>\end{array}\right ]} ={ G_{kj}}_{d \times m}$$</p>
-<p>至此, 整個計算流程(計算圖)已經很明朗了,<br>我們的目的就是找到:</p>
-<p>$$ Find\ \ \mathbb{G},\  \frac{\partial z_j}{\partial w_{ji}} ,\  \frac{\partial z_j}{\partial b_{j}} ,\  \frac{\partial z_j}{\partial x_{i}} $$ </p>
+<p><span class="math display">\[ \frac{\partial J_k}{\partial w_{ji}} = \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  \frac{\partial z_j}{\partial w_{ji}} = G_{kj}\ \frac{\partial z_j}{\partial w_{ji}} \ \ ...(1)\]</span></p>
+<p><span class="math display">\[ \frac{\partial J_k}{\partial b_{j}} =  \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  \frac{\partial z_j}{\partial b_{j}}  = G_{kj}\ \frac{\partial z_j}{\partial b_{j}}  \ \ ...(2)\]</span></p>
+<p><span class="math display">\[ \frac{\partial J_k}{\partial x_{i}}\ (\nabla_{in}) =  \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  \frac{\partial z_j}{\partial x_{i}}  = G_{kj}\ \frac{\partial z_j}{\partial x_{i}}  \ \ ...(3)\]</span></p>
+<p>上列各式重複<span class="math inline">\(\frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}\)</span>的部分, 方便起見, 定義中介梯度<span class="math inline">\(\mathbb{G}\)</span>:</p>
+<p><span class="math display">\[ \mathbb{G}\ =  \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  \]</span></p>
+<p><span class="math display">\[ \mathbb{G}= 
+{\left[ \begin{array}{ccc} 
+G_{11},\ G_{12}, ... ,\ G_{1m}\ \\
+... , G_{kj}, ... \\
+G_{k1},\ G_{k2}, ... ,\ G_{dm}\ \\
+\end{array}\right ]} =\{ G_{kj}\}_{d \times m}\]</span></p>
+<p>至此, 整個計算流程(計算圖)已經很明朗了, 我們的目的就是找到:</p>
+<p><span class="math display">\[ Find\ \ \mathbb{G},\  \frac{\partial z_j}{\partial w_{ji}} ,\  \frac{\partial z_j}{\partial b_{j}} ,\  \frac{\partial z_j}{\partial x_{i}} \]</span></p>
 <p>只要算出上述四項, 就可以得到所求</p>
-<ol>
-<li>計算$G_{kj}$</li>
+<ol type="1">
+<li>計算<span class="math inline">\(G_{kj}\)</span></li>
 </ol>
-<p>$$  \frac{\partial y_j}{\partial z_j}  = \sigma ‘ (z_j) $$ </p>
-<p>$$ =&gt; G_{kj} = \frac{\partial J_k}{\partial y_{j}}\ \sigma ‘ (z_j) = (dout)\ \sigma ‘ (z_j)$$ </p>
-<ol start="2">
-<li>計算$\frac{\partial z_j}{\partial w_{ji}} ,\  \frac{\partial z_j}{\partial b_{j}} ,\  \frac{\partial z_j}{\partial x_{i}}$</li>
+<p><span class="math display">\[  \frac{\partial y_j}{\partial z_j}  = \sigma &#39; (z_j) \]</span></p>
+<p><span class="math display">\[ =&gt; G_{kj} = \frac{\partial J_k}{\partial y_{j}}\ \sigma &#39; (z_j) = (dout)\ \sigma &#39; (z_j)\]</span></p>
+<ol start="2" type="1">
+<li>計算<span class="math inline">\(\frac{\partial z_j}{\partial w_{ji}} ,\  \frac{\partial z_j}{\partial b_{j}} ,\  \frac{\partial z_j}{\partial x_{i}}\)</span></li>
 </ol>
-<p>$$  \frac{\partial z_j}{\partial w_{ji}}  = x_{i} $$ </p>
-<p>$$  \frac{\partial z_j}{\partial b_{j}}  = 1 $$ </p>
-<p>$$  \frac{\partial z_j}{\partial x_{i}}  = w_{ji} $$ </p>
-<ol start="3">
+<p><span class="math display">\[  \frac{\partial z_j}{\partial w_{ji}}  = x_{i} \]</span></p>
+<p><span class="math display">\[  \frac{\partial z_j}{\partial b_{j}}  = 1 \]</span></p>
+<p><span class="math display">\[  \frac{\partial z_j}{\partial x_{i}}  = w_{ji} \]</span></p>
+<ol start="3" type="1">
 <li>代入式(1)(2)(3), 得到結果</li>
 </ol>
-<p>$$ =&gt; \frac{\partial J_k}{\partial w_{ji}} = G_{kj} \ x_i\ ,\ \ \frac{\partial J_k}{\partial b_{j}} = G_{kj} , \ \ \frac{\partial J_k}{\partial x_{i}}\ (\nabla_{in}) =  G_{kj}\ w_{ji}\ $$</p>
+<p><span class="math display">\[ =&gt; \frac{\partial J_k}{\partial w_{ji}} = G_{kj} \ x_i\ ,\\ \ \frac{\partial J_k}{\partial b_{j}} = G_{kj} , \\ \ \frac{\partial J_k}{\partial x_{i}}\ (\nabla_{in}) =  G_{kj}\ w_{ji}\ \]</span></p>
 <hr>
-<p>以上就是整個BP演算法”單層”的計算過程, 化成python程式碼如下:</p>
+<p>以上就是整個BP演算法&quot;單層&quot;的計算過程, 化成python程式碼如下:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">backward</span><span class="params">(self,dout)</span>:</span>  </span><br><span class="line">    Z,x = self.cache</span><br><span class="line">    G = dout * self.dactive_fn(Z)</span><br><span class="line">    din = G.dot(self.W.T)</span><br><span class="line">    dW = x.T.dot(G) </span><br><span class="line">    db = G.sum(axis=<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> din,dW,db</span><br></pre></td></tr></table></figure>
-
-<p>程式碼來源: <a href="https://github.com/purelyvivid/DeepLearning_practice/blob/master/3.%20BP%20algo.py" target="_blank" rel="noopener">https://github.com/purelyvivid/DeepLearning_practice/blob/master/3.%20BP%20algo.py</a> (用numpy寫一個BP algorithm)</p>
+<p>程式碼來源: https://github.com/purelyvivid/DeepLearning_practice/blob/master/3.%20BP%20algo.py (用numpy寫一個BP algorithm)</p>
 
       
     </div>

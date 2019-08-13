@@ -347,31 +347,31 @@
         
           
             <p><strong>最大似然估計法</strong>(Maximum Likelihood Estimation, MLE)是一種頻率學派的方法, 是統計上很常用的<strong>點估計</strong>方法</p>
-<p><strong>似然函數</strong>(likelihood function)是一種在參數$\theta$下觀察到樣本出現的條件機率:</p>
-<p>$$ L(\theta) = \prod^{n}_{i=1} {f(x_i|\theta)} $$</p>
+<p><strong>似然函數</strong>(likelihood function)是一種在參數<span class="math inline">\(\theta\)</span>下觀察到樣本出現的條件機率:</p>
+<p><span class="math display">\[ L(\theta) = \prod^{n}_{i=1} {f(x_i|\theta)} \]</span></p>
 <p>多取一個log, 比較方便後續微分, 叫做對數似然函數(log likelihood function):</p>
-<p>$$l(\theta)=log(L(\theta))=\prod^{n}_{i=1} { log \ f(x_i|\theta)}$$</p>
-<p>以下所有的$L$都可以用$l$來代替</p>
-<p><strong>最大似然估計法</strong>(Maximum Likelihood Estimation, MLE)是藉由給定的樣本尋找最可能的$\theta$, 藉此來最大化<strong>似然函數</strong>(likelihood function)的方法</p>
-<p>$$ \max_{\theta}\ L(\theta)$$</p>
-<p>假設<strong>存在</strong>一個唯一的$\hat{\theta}$使得似然函數最大化, 此時:</p>
-<p>$$ \frac{ \partial L(\theta) }{\partial \theta} = 0\ ,\ \frac{ \partial L^2(\theta) }{\partial \theta^2} &lt; 0 $$</p>
-<p>其中$x_i$是已知的樣本, 假定$f$是含未知參數但形式已知的函式(假設可微分), 此時可藉由上式求解最佳母體參數$\hat{\theta}$, 求得後, 可以用該參數的母體來進行新樣本的推論</p>
+<p><span class="math display">\[l(\theta)=log(L(\theta))=\prod^{n}_{i=1} { log \ f(x_i|\theta)}\]</span></p>
+<p>以下所有的<span class="math inline">\(L\)</span>都可以用<span class="math inline">\(l\)</span>來代替</p>
+<p><strong>最大似然估計法</strong>(Maximum Likelihood Estimation, MLE)是藉由給定的樣本尋找最可能的<span class="math inline">\(\theta\)</span>, 藉此來最大化<strong>似然函數</strong>(likelihood function)的方法</p>
+<p><span class="math display">\[ \max_{\theta}\ L(\theta)\]</span></p>
+<p>假設<strong>存在</strong>一個唯一的<span class="math inline">\(\hat{\theta}\)</span>使得似然函數最大化, 此時:</p>
+<p><span class="math display">\[ \frac{ \partial L(\theta) }{\partial \theta} = 0\ ,\ \frac{ \partial L^2(\theta) }{\partial \theta^2} &lt; 0 \]</span></p>
+<p>其中<span class="math inline">\(x_i\)</span>是已知的樣本, 假定<span class="math inline">\(f\)</span>是含未知參數但形式已知的函式(假設可微分), 此時可藉由上式求解最佳母體參數<span class="math inline">\(\hat{\theta}\)</span>, 求得後, 可以用該參數的母體來進行新樣本的推論</p>
 <hr>
 <p>若假設樣本為常態分佈:</p>
-<p>$$ X_1, X_2, …, X_n \sim i.i.d.\ N(\mu, \sigma) $$</p>
-<p>參數$\theta$則為$\mu$和$\sigma$, 此時的$f$是常態分佈的pdf(機率密度函數):</p>
-<p>$$ f(x| \mu, \sigma^2) = \frac{1}{\sqrt{2 \pi \sigma^2 }}\ exp(- \frac{(x-\mu)^2}{2 \sigma^2})$$</p>
-<p>此時的最大對數似然函數, 經過一次微分等於零的操作後, 可以解得$\hat{\mu}$和$\hat{\sigma}$:</p>
-<p>$$ \hat{\mu} = \bar{x} = \sum^n_{i=1} \frac{x_i}{n}$$</p>
-<p>$$ \hat{\sigma}^2 =  \frac{1}{n}\sum^n_{i=1} (x_i-\bar{x})^2$$</p>
+<p><span class="math display">\[ X_1, X_2, ..., X_n \sim i.i.d.\ N(\mu, \sigma) \]</span></p>
+<p>參數<span class="math inline">\(\theta\)</span>則為<span class="math inline">\(\mu\)</span>和<span class="math inline">\(\sigma\)</span>, 此時的<span class="math inline">\(f\)</span>是常態分佈的pdf(機率密度函數):</p>
+<p><span class="math display">\[ f(x| \mu, \sigma^2) = \frac{1}{\sqrt{2 \pi \sigma^2 }}\ exp(- \frac{(x-\mu)^2}{2 \sigma^2})\]</span></p>
+<p>此時的最大對數似然函數, 經過一次微分等於零的操作後, 可以解得<span class="math inline">\(\hat{\mu}\)</span>和<span class="math inline">\(\hat{\sigma}\)</span>:</p>
+<p><span class="math display">\[ \hat{\mu} = \bar{x} = \sum^n_{i=1} \frac{x_i}{n}\]</span></p>
+<p><span class="math display">\[ \hat{\sigma}^2 =  \frac{1}{n}\sum^n_{i=1} (x_i-\bar{x})^2\]</span></p>
 <p>以上就是我們常用的母體平均值和母體變異數估計公式, 是假設常態分佈的情況下推導出來</p>
-<p>其中, 參數$\hat{\mu}$的估計量滿足<strong>不偏性</strong>(non-bias):</p>
-<p>$$E[\hat{\mu}] = \mu$$</p>
-<p>參數$\hat{\sigma}^2$的估計量卻<strong>沒有</strong>滿足不偏性:</p>
-<p>$$E[\hat{\sigma}^2] = \frac{n-1}{n}\ \hat{\sigma}^2$$</p>
-<p>這就是樣本變異量要除以$n-1$的原因:</p>
-<p>$$ s^2 =  \frac{1}{n-1}\sum^n_{i=1} (x_i-\bar{x})^2$$</p>
+<p>其中, 參數<span class="math inline">\(\hat{\mu}\)</span>的估計量滿足<strong>不偏性</strong>(non-bias):</p>
+<p><span class="math display">\[E[\hat{\mu}] = \mu\]</span></p>
+<p>參數<span class="math inline">\(\hat{\sigma}^2\)</span>的估計量卻<strong>沒有</strong>滿足不偏性:</p>
+<p><span class="math display">\[E[\hat{\sigma}^2] = \frac{n-1}{n}\ \hat{\sigma}^2\]</span></p>
+<p>這就是樣本變異量要除以<span class="math inline">\(n-1\)</span>的原因:</p>
+<p><span class="math display">\[ s^2 =  \frac{1}{n-1}\sum^n_{i=1} (x_i-\bar{x})^2\]</span></p>
 <p>這樣代進去才會讓母體變異數正確地滿足不偏性</p>
 
           
@@ -514,31 +514,31 @@
       
         
           
-            <h1 id="統計中的信賴區間-Confidence-interval-是什麼"><a href="#統計中的信賴區間-Confidence-interval-是什麼" class="headerlink" title="統計中的信賴區間(Confidence interval)是什麼?"></a>統計中的信賴區間(Confidence interval)是什麼?</h1><p><strong>信賴區間</strong>(Confidence interval，CI)這個詞經常被提及，但是否真的了解其含義呢? </p>
+            <h1 id="統計中的信賴區間confidence-interval是什麼">統計中的信賴區間(Confidence interval)是什麼?</h1>
+<p><strong>信賴區間</strong>(Confidence interval，CI)這個詞經常被提及，但是否真的了解其含義呢?</p>
 <p><strong>推論統計</strong>(statistical inference)中的<strong>參數估計</strong>(Parameter Estimation)是利用<strong>樣本統計量</strong>或其分配來估計<strong>母體參數</strong>, 例如想估計全班的身高平均, 假設全班的身高為常態分布, 隨機抽樣幾個人算身高平均, 就把它當成全班的平均, 這就是參數估計(平均值是常態分佈的一個參數)</p>
 <p><strong>參數估計</strong>又分成<strong>點估計</strong>（point estimate）和<strong>區間估計</strong>（Interval Estimation）</p>
 <p><strong>點估計</strong>顧名思義就是估計一個點, 把這個點當作母體參數, 而<strong>區間估計</strong>就是把母體參數視為一個區間範圍, 並不侷限在一固定的點</p>
 <p>區間估計通常先求出<strong>點估計</strong>值, 然後在一個<strong>信賴水準</strong>下導出一個<strong>信賴區間</strong>, 這個信賴區間是一組上下限, 而信賴水準是指該區間包含母體參數的可信度</p>
 <p>舉例來說, 若我們想對母體平均值做一個信賴水準95%的區間估計, 而假設資料是常態分布, 則樣本平均:</p>
-<p>$$ \bar{X} \sim N(\mu , \frac{\sigma^2}{n} ) $$</p>
+<p><span class="math display">\[ \bar{X} \sim N(\mu , \frac{\sigma^2}{n} ) \]</span></p>
 <p>將它標準化:</p>
-<p>$$ Z = \frac{\bar{X}-\mu}{ \frac{\sigma}{\sqrt{n}}} $$</p>
+<p><span class="math display">\[ Z = \frac{\bar{X}-\mu}{ \frac{\sigma}{\sqrt{n}}} \]</span></p>
 <p>信賴水準95%表示:</p>
-<p>$$P(-z\leq Z\leq z)= 1- \alpha =0.95 $$</p>
-<p>$z$是quantile, 可以用程式語言python套件scipy的<code>scipy.stats.norm.ppf(1-0.025)</code>求得, ppf ($\Phi^{-1}$)是cdf的反函數</p>
+<p><span class="math display">\[P(-z\leq Z\leq z)= 1- \alpha =0.95 \]</span></p>
+<p><span class="math inline">\(z\)</span>是quantile, 可以用程式語言python套件scipy的<code>scipy.stats.norm.ppf(1-0.025)</code>求得, ppf (<span class="math inline">\(\Phi^{-1}\)</span>)是cdf的反函數</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scipy.stats <span class="keyword">as</span> stats</span><br><span class="line">stats.norm.ppf(<span class="number">1</span><span class="number">-0.025</span>)</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>1.959963984540054</p>
 </blockquote>
-<p>故$z$約等於$1.96$:</p>
-<p>$$P(-1.96\leq Z\leq 1.96)= 1- \alpha =0.95 $$</p>
-<p>將標準化後的$Z$代入:</p>
-<p>$$P(-1.96\leq \frac{\bar{X}-\mu}{ \frac{\sigma}{\sqrt{n}}} \leq 1.96)= 1- \alpha =0.95 $$</p>
+<p>故<span class="math inline">\(z\)</span>約等於<span class="math inline">\(1.96\)</span>:</p>
+<p><span class="math display">\[P(-1.96\leq Z\leq 1.96)= 1- \alpha =0.95 \]</span></p>
+<p>將標準化後的<span class="math inline">\(Z\)</span>代入:</p>
+<p><span class="math display">\[P(-1.96\leq \frac{\bar{X}-\mu}{ \frac{\sigma}{\sqrt{n}}} \leq 1.96)= 1- \alpha =0.95 \]</span></p>
 <p>整理一下:</p>
-<p>$$ P(\bar{X}-1.96 \frac{\sigma}{\sqrt{n}} \leq \mu  \leq \bar{X}+ 1.96  \frac{\sigma}{\sqrt{n}} )= 0.95$$</p>
-<p>這表示我們可以從樣本平均數$\bar{X}$, 樣本數$n$, 和母體標準差$\sigma$估算95%信心水準的信賴區間為:</p>
-<p>$$ [ \bar{X}-1.96 \frac{\sigma}{\sqrt{n}} , \bar{X}+ 1.96  \frac{\sigma}{\sqrt{n}} ] $$</p>
+<p><span class="math display">\[ P(\bar{X}-1.96 \frac{\sigma}{\sqrt{n}} \leq \mu  \leq \bar{X}+ 1.96  \frac{\sigma}{\sqrt{n}} )= 0.95\]</span></p>
+<p>這表示我們可以從樣本平均數<span class="math inline">\(\bar{X}\)</span>, 樣本數<span class="math inline">\(n\)</span>, 和母體標準差<span class="math inline">\(\sigma\)</span>估算95%信心水準的信賴區間為:</p>
+<p><span class="math display">\[ [ \bar{X}-1.96 \frac{\sigma}{\sqrt{n}} , \bar{X}+ 1.96  \frac{\sigma}{\sqrt{n}} ] \]</span></p>
 
           
         
@@ -681,67 +681,69 @@
         
           
             <p>要真正了解SVM (Support Vector Machines, 支持向量機), 必須了解什麼是<strong>核模型</strong>和<strong>核技巧</strong>, 假如只粗淺地知道它是一個<strong>最大化間隔</strong>(margin)的方法就太可惜了。以下從<strong>線性模型</strong>(Linear Model)開始, 逐步講到<strong>核模型</strong>(Kernel Model), 一窺其優雅之處。</p>
-<h2 id="線性模型-Linear-Model"><a href="#線性模型-Linear-Model" class="headerlink" title="線性模型(Linear Model)"></a>線性模型(Linear Model)</h2><p>假如我們要學習一個函數$f$, 而假定這個函數的輸入(input)是一維的, 輸出是一個純量(scalar), 最直觀的函數模擬方式就是<strong>線性模型</strong>, 考慮一個<strong>線性加法模型</strong>, 也就是把每個$x$前面冠上一個參數$\theta$, 再線性加總起來:</p>
-<p>$$f_{\theta}=\sum_{j=1}^{d} \theta_{j}x_{j}=\Theta\mathbf{x}$$</p>
-<p>$$\mathbf{x} = (x_1, x_2, …, x_d)^T$$</p>
-<p>$$\Theta = (\theta_1, \theta_2,…, \theta_d)$$</p>
-<h2 id="廣義線性模型-Generailized-Linear-Model"><a href="#廣義線性模型-Generailized-Linear-Model" class="headerlink" title="廣義線性模型(Generailized Linear Model)"></a>廣義線性模型(Generailized Linear Model)</h2><p>然而, 當遇到複雜函數時, 線性模型顯然不足以表達, 因此定義<strong>廣義線性模型</strong>:</p>
-<p>$$f_{\theta}=\sum_{j=1}^{b} \theta_{j}\phi_{j}(\mathbf{x})=\Theta\Phi$$</p>
-<p>$$\Theta = (\theta_1, \theta_2,…, \theta_b)$$</p>
-<p>$$\Phi = (\phi_1(\mathbf{x}),\phi_2(\mathbf{x}), …, \phi_b(\mathbf{x}))^T $$</p>
-<p>其中, $b$是基函數(basis function)的個數, 此時就可以來表達非線性模型了, 可以透過設計一組好的基函數, 來增加模型的表達能力。</p>
-<p>為了把特徵空間複雜化, 通常基函數的個數$b$會遠大於輸入的維度$d$ ($b&gt;&gt;d$), 這個$\phi$可以視為是將特徵從$d$維映射到$b$維的函數。</p>
+<h2 id="線性模型linear-model">線性模型(Linear Model)</h2>
+<p>假如我們要學習一個函數<span class="math inline">\(f\)</span>, 而假定這個函數的輸入(input)是一維的, 輸出是一個純量(scalar), 最直觀的函數模擬方式就是<strong>線性模型</strong>, 考慮一個<strong>線性加法模型</strong>, 也就是把每個<span class="math inline">\(x\)</span>前面冠上一個參數<span class="math inline">\(\theta\)</span>, 再線性加總起來:</p>
+<p><span class="math display">\[f_{\theta}=\sum_{j=1}^{d} \theta_{j}x_{j}=\Theta\mathbf{x}\]</span></p>
+<p><span class="math display">\[\mathbf{x} = (x_1, x_2, ..., x_d)^T\]</span></p>
+<p><span class="math display">\[\Theta = (\theta_1, \theta_2,..., \theta_d)\]</span></p>
+<h2 id="廣義線性模型generailized-linear-model">廣義線性模型(Generailized Linear Model)</h2>
+<p>然而, 當遇到複雜函數時, 線性模型顯然不足以表達, 因此定義<strong>廣義線性模型</strong>:</p>
+<p><span class="math display">\[f_{\theta}=\sum_{j=1}^{b} \theta_{j}\phi_{j}(\mathbf{x})=\Theta\Phi\]</span></p>
+<p><span class="math display">\[\Theta = (\theta_1, \theta_2,..., \theta_b)\]</span></p>
+<p><span class="math display">\[\Phi = (\phi_1(\mathbf{x}),\phi_2(\mathbf{x}), ..., \phi_b(\mathbf{x}))^T \]</span></p>
+<p>其中, <span class="math inline">\(b\)</span>是基函數(basis function)的個數, 此時就可以來表達非線性模型了, 可以透過設計一組好的基函數, 來增加模型的表達能力。</p>
+<p>為了把特徵空間複雜化, 通常基函數的個數<span class="math inline">\(b\)</span>會遠大於輸入的維度<span class="math inline">\(d\)</span> (<span class="math inline">\(b&gt;&gt;d\)</span>), 這個<span class="math inline">\(\phi\)</span>可以視為是將特徵從<span class="math inline">\(d\)</span>維映射到<span class="math inline">\(b\)</span>維的函數。</p>
 <p>特徵複雜化之後可以做什麼呢?</p>
 <p>(1)對於<strong>迴歸</strong>(regression)型任務, 特徵複雜化有助於函數擬合(curve fitting)。</p>
 <p>(2)對於<strong>分類</strong>(classification)型任務, 特徵複雜化有助於找到好的分割超平面(hyperplane)。</p>
-<p><img src="https://i.stack.imgur.com/UvH8A.png" alt></p>
+<p><img src="https://i.stack.imgur.com/UvH8A.png"></p>
 <p>這裡的基函數, 可以定義成:</p>
-<p>$$\phi(x)=(1, x, x^2, …, x^{(b-1)})^T$$</p>
-<p>這種形式, $f_{\theta}$就成為<strong>多項式</strong>(polynomial)</p>
+<p><span class="math display">\[\phi(x)=(1, x, x^2, ..., x^{(b-1)})^T\]</span></p>
+<p>這種形式, <span class="math inline">\(f_{\theta}\)</span>就成為<strong>多項式</strong>(polynomial)</p>
 <p>或是定義成:</p>
-<p>$$\phi(x)=(1, sin(x), cos(x), sin(2x), cos(2x)…, sin(mx), cos(mx))^T$$</p>
-<p>$$b=2m+1$$<br>函數$f_{\theta}$就成為<strong>離散傅立葉級數</strong>(Discrete Fourier series)。</p>
-<p>經過適當設計,可以讓$\Phi(\mathbf{x})$成為對$\mathbf{x}$進行離散傅立葉變換（Discrete Fourier Transform，DFT）。</p>
-<p>如果考慮連續傅立葉變換, 基函數可以無窮多個, 也就是說, 甚至可以將特徵從維度$d$投影到<strong>無窮維</strong>。</p>
-<h2 id="核模型-Kernel-Model"><a href="#核模型-Kernel-Model" class="headerlink" title="核模型(Kernel Model)"></a>核模型(Kernel Model)</h2><p>前面講到, 廣義線性模型將特徵$\mathbf{x}$透過$\phi$映射到更多維甚至無窮維的空間, 這時候就產生一個問題: <strong>如何設計最好的$\phi$</strong>?</p>
-<p>這是一個頗難的問題, 想想看, 先不要管基函數的形式怎麼設計(多項式?三角函數?指數?), 光是<strong>基函數的個數</strong>$b$就難以決定: 到底要投影到<strong>幾維</strong>才足夠複雜到可以解決任務, 且<strong>維度詛咒</strong>(curse of dimensionality)又不至於太過嚴重呢?</p>
-<p><img src="https://miro.medium.com/max/498/1*Ts2X2ow29QLDEeLvSE14Ew.png" alt></p>
+<p><span class="math display">\[\phi(x)=(1, sin(x), cos(x), sin(2x), cos(2x)..., sin(mx), cos(mx))^T\]</span></p>
+<p><span class="math display">\[b=2m+1\]</span> 函數<span class="math inline">\(f_{\theta}\)</span>就成為<strong>離散傅立葉級數</strong>(Discrete Fourier series)。</p>
+<p>經過適當設計,可以讓<span class="math inline">\(\Phi(\mathbf{x})\)</span>成為對<span class="math inline">\(\mathbf{x}\)</span>進行離散傅立葉變換（Discrete Fourier Transform，DFT）。</p>
+<p>如果考慮連續傅立葉變換, 基函數可以無窮多個, 也就是說, 甚至可以將特徵從維度<span class="math inline">\(d\)</span>投影到<strong>無窮維</strong>。</p>
+<h2 id="核模型kernel-model">核模型(Kernel Model)</h2>
+<p>前面講到, 廣義線性模型將特徵<span class="math inline">\(\mathbf{x}\)</span>透過<span class="math inline">\(\phi\)</span>映射到更多維甚至無窮維的空間, 這時候就產生一個問題: <strong>如何設計最好的<span class="math inline">\(\phi\)</span></strong>?</p>
+<p>這是一個頗難的問題, 想想看, 先不要管基函數的形式怎麼設計(多項式?三角函數?指數?), 光是<strong>基函數的個數</strong><span class="math inline">\(b\)</span>就難以決定: 到底要投影到<strong>幾維</strong>才足夠複雜到可以解決任務, 且<strong>維度詛咒</strong>(curse of dimensionality)又不至於太過嚴重呢?</p>
+<p><img src="https://miro.medium.com/max/498/1*Ts2X2ow29QLDEeLvSE14Ew.png"></p>
 <p>面對這種看起來毫無頭緒的問題, 這時候需要引入一些先驗假設, 而最好的先驗知識來源, 就是我們的<strong>輸入樣本</strong>(也就是數據)。</p>
 <p>試想, 假如數據中隱含某種模式或原則, 符合模式的那些樣本彼此之間應該距離較近; 或者換個方式說, 過去有出現過的樣本在特徵空間中的分布如果集中在某個位置, 我們可以假定下一個出現的樣本應該有比較大的機率出現在相同位置。</p>
-<p>因此, 想要從樣本中找規律, 我們有時會希望讓不同樣本之間可以產生一些互動, 此時通常會涉及到計算:$\phi(x_i)\phi(x_j)$, 也就是<strong>兩個特徵向量的內積</strong>, 而這個內積其實並不好計算, 尤其當特徵空間維度(基函數個數$b$)很大的時候。</p>
-<p>此時<strong>核函數</strong>(kernel function)$K$就能派上用場, 核函數是一個二元函數$K(\cdot,\cdot)$ 是一個定義<strong>內積</strong>的函數, 可被設計, 而<strong>核模型</strong>(Kernel Model)可以表示為<strong>核函數的線性組合</strong>。</p>
-<p>$$f_{\theta}=\sum_{j=1}^{n} \theta_{j}K(\mathbf{x},\mathbf{x}_ j)=\Theta\mathbf{K}$$</p>
-<p>其中$n$是樣本數, 注意: <strong>線性模型</strong>的基函數與樣本無關, 然而<strong>核模型</strong>設計時會用到輸入樣本 <img src="https://i.imgur.com/jtLy7x4.gif" alt> , 核函數構成的矩陣$\mathbf{K}$可以寫成:</p>
+<p>因此, 想要從樣本中找規律, 我們有時會希望讓不同樣本之間可以產生一些互動, 此時通常會涉及到計算:<span class="math inline">\(\phi(x_i)\phi(x_j)\)</span>, 也就是<strong>兩個特徵向量的內積</strong>, 而這個內積其實並不好計算, 尤其當特徵空間維度(基函數個數<span class="math inline">\(b\)</span>)很大的時候。</p>
+<p>此時<strong>核函數</strong>(kernel function)<span class="math inline">\(K\)</span>就能派上用場, 核函數是一個二元函數<span class="math inline">\(K(\cdot,\cdot)\)</span> 是一個定義<strong>內積</strong>的函數, 可被設計, 而<strong>核模型</strong>(Kernel Model)可以表示為<strong>核函數的線性組合</strong>。</p>
+<p><span class="math display">\[f_{\theta}=\sum_{j=1}^{n} \theta_{j}K(\mathbf{x},\mathbf{x}_ j)=\Theta\mathbf{K}\]</span></p>
+<p>其中<span class="math inline">\(n\)</span>是樣本數, 注意: <strong>線性模型</strong>的基函數與樣本無關, 然而<strong>核模型</strong>設計時會用到輸入樣本 <img src="https://i.imgur.com/jtLy7x4.gif"> , 核函數構成的矩陣<span class="math inline">\(\mathbf{K}\)</span>可以寫成:</p>
 <!-- $$ \mathbf{K}= {\left[ \begin{array}{ccc} 
 K( {\mathbf{x}}_1 , {\mathbf{x}}_1 ), \ K( {\mathbf{x}}_2, {\mathbf{x}}_1 ), ... ,\ K( {\mathbf{x}}_n, {\mathbf{x}}_1 ) \ \\ 
 K( {\mathbf{x}}_1 , {\mathbf{x}}_2 ), \ K( {\mathbf{x}}_2, {\mathbf{x}}_2 ), ... ,\ K( {\mathbf{x}}_n, {\mathbf{x}}_2 ) \ \\ 
 ...,\ ..., \ ...\ \\
 K( {\mathbf{x}}_1, {\mathbf{x}}_n ), \ K( {\mathbf{x}}_2, {\mathbf{x}}_n), ... ,\ K( {\mathbf{x}}_n, {\mathbf{x}}_n ) \ \\ 
 \end{array}\right ]}_{n \times n} $$ -->
-
-<p><img src="https://i.imgur.com/cGeSWWg.gif" alt></p>
-<p>值得注意的是, <strong>核模型的參數個數只與樣本數$n$有關, 與輸入的維度$d$無關</strong>, 這代表在樣本數不大($d&gt;&gt;n$)的情形下, 核模型可以避免<strong>維度災難</strong>。</p>
-<p>即使$n$很大, 只要取輸入樣本 <img src="https://i.imgur.com/jtLy7x4.gif" alt> 的部分集合均值 <img src="https://i.imgur.com/rwoMU6y.gif" alt> 來進行計算 $ (b&lt;&lt;n) $ , 維度也能得到很好的控制。</p>
-<p>$$f_{\theta}=\sum_{j=1}^{b} \theta_{j} K(\mathbf{x},\mathbf{c}_ j)=\Theta\mathbf{K}_{b \times n}$$</p>
+<p><img src="https://i.imgur.com/cGeSWWg.gif"></p>
+<p>值得注意的是, <strong>核模型的參數個數只與樣本數<span class="math inline">\(n\)</span>有關, 與輸入的維度<span class="math inline">\(d\)</span>無關</strong>, 這代表在樣本數不大(<span class="math inline">\(d&gt;&gt;n\)</span>)的情形下, 核模型可以避免<strong>維度災難</strong>。</p>
+<p>即使<span class="math inline">\(n\)</span>很大, 只要取輸入樣本 <img src="https://i.imgur.com/jtLy7x4.gif"> 的部分集合均值 <img src="https://i.imgur.com/rwoMU6y.gif"> 來進行計算 $ (b&lt;&lt;n) $ , 維度也能得到很好的控制。</p>
+<p><span class="math display">\[f_{\theta}=\sum_{j=1}^{b} \theta_{j} K(\mathbf{x},\mathbf{c}_ j)=\Theta\mathbf{K}_{b \times n}\]</span></p>
 <p>核模型並非線性模型, 但是線性模型可以視為核模型的特例。</p>
 <p>透過這種<strong>定義核函數</strong>的方法, 對基函數的<strong>內積</strong>進行特殊設計, 使得<strong>不須直接設計基函數</strong>, 透過定義核函數而隱式地(implicitly)定義了基函數, 這種方法稱為<strong>核技巧</strong>(kernel trick)或<strong>核方法</strong>(kernel method)。</p>
-<p><strong>核函數</strong>的設計要滿足一些條件, 核函數必須是<strong>對稱函數</strong>, 且所構成的核矩陣$ \mathbf{K} $必須要是<strong>半正定</strong>(證明可參考<a href="https://pdfs.semanticscholar.org/2862/e7b8fefb209cdb4c47a1643f2af71cd67b00.pdf" target="_blank" rel="noopener">Scholkopf and Smola, 2002</a>)</p>
+<p><strong>核函數</strong>的設計要滿足一些條件, 核函數必須是<strong>對稱函數</strong>, 且所構成的核矩陣$  $必須要是<strong>半正定</strong>(證明可參考<a href="https://pdfs.semanticscholar.org/2862/e7b8fefb209cdb4c47a1643f2af71cd67b00.pdf" target="_blank" rel="noopener">Scholkopf and Smola, 2002</a>)</p>
 <p>幾種常用的核函數如下:</p>
-<ol>
+<ol type="1">
 <li>線性核</li>
 </ol>
-<p>$$K(\mathbf{x}_i, \mathbf{x}_j)=\mathbf{x}_i^{T}\mathbf{x}_j$$</p>
-<ol start="2">
+<p><span class="math display">\[K(\mathbf{x}_i, \mathbf{x}_j)=\mathbf{x}_i^{T}\mathbf{x}_j\]</span></p>
+<ol start="2" type="1">
 <li>多項式核</li>
 </ol>
-<p>$$K(\mathbf{x}_i, \mathbf{x}_j)=(\mathbf{x}_i^{T}\mathbf{x}_j)^d, d\geq1$$</p>
-<ol start="3">
+<p><span class="math display">\[K(\mathbf{x}_i, \mathbf{x}_j)=(\mathbf{x}_i^{T}\mathbf{x}_j)^d, d\geq1\]</span></p>
+<ol start="3" type="1">
 <li>高斯核(一種徑向基函數核, Radial basis function kernel, RBF核)</li>
 </ol>
-<p>$$K(\mathbf{x}_i, \mathbf{x}_j)=exp(-\frac{||\mathbf{x}_i-\mathbf{x}_j||^2}{2\sigma^2})$$</p>
-<p>高斯核(RBF核)是最常用的一種kernel, 它的意義是將每個樣本的出現都視為由一個高斯分布的隨機變數$X_j \sim N(\mathbf{x}_{j}, \sigma)$生成, 而待學習的參數$\theta_j$則是這個分布的<strong>高度</strong>。</p>
+<p><span class="math display">\[K(\mathbf{x}_i, \mathbf{x}_j)=exp(-\frac{||\mathbf{x}_i-\mathbf{x}_j||^2}{2\sigma^2})\]</span></p>
+<p>高斯核(RBF核)是最常用的一種kernel, 它的意義是將每個樣本的出現都視為由一個高斯分布的隨機變數<span class="math inline">\(X_j \sim N(\mathbf{x}_{j}, \sigma)\)</span>生成, 而待學習的參數<span class="math inline">\(\theta_j\)</span>則是這個分布的<strong>高度</strong>。</p>
 <p><strong>高斯核模型</strong>是用高斯核函數的加權加總在逼近一個未知函數, 這個函數逼近的過程<a href="https://shomy.top/2017/02/26/rbf-network/" target="_blank" rel="noopener">可以看做是一個簡單神經網路</a>。</p>
-<p> <strong>高斯核模型</strong>又有點像是$n$個Component的<strong>高斯混合模型</strong>（Gaussian mixture model，GMM）, 兩者都需要學習每個高斯的權重(weight), 但兩者仍有本質上的不同, GMM的機率密度函數是學習出來的, 在高斯核模型中, 期望值(Means)和共變異數（Covariances）都是固定的, 不像在GMM中是可學習的參數, 這是由於RBF核當初設計的目的是為了做<strong>多變量插值</strong>的緣故。</p>
+<p><strong>高斯核模型</strong>又有點像是<span class="math inline">\(n\)</span>個Component的<strong>高斯混合模型</strong>（Gaussian mixture model，GMM）, 兩者都需要學習每個高斯的權重(weight), 但兩者仍有本質上的不同, GMM的機率密度函數是學習出來的, 在高斯核模型中, 期望值(Means)和共變異數（Covariances）都是固定的, 不像在GMM中是可學習的參數, 這是由於RBF核當初設計的目的是為了做<strong>多變量插值</strong>的緣故。</p>
 
           
         
@@ -886,102 +888,95 @@ K( {\mathbf{x}}_1, {\mathbf{x}}_n ), \ K( {\mathbf{x}}_2, {\mathbf{x}}_n), ... ,
             <p>在深度學習領域的人，對<strong>捲積</strong>(Convolution)應該都不陌生，但不一定聽說過<strong>圖</strong>(Graph)也可以做Convolution。這篇文章對<strong>GCN</strong>(Graph Convolutional Network)做了概略的介紹。</p>
 <hr>
 <p>CNN的捲積不是數學定義上的連續捲積，而是一種定義的離散捲積。我們用這種捲積來處理圖像(image)，從圖像中提取特徵，並且透過神經網路來學習捲積的權重(weight)。以下所稱的捲積都是指這種局部的離散捲積。</p>
-<p><img src="https://pic4.zhimg.com/80/v2-394cb7b5f6dfb23dcddd838ebdee548b_hd.jpg" alt></p>
+<p><img src="https://pic4.zhimg.com/80/v2-394cb7b5f6dfb23dcddd838ebdee548b_hd.jpg"></p>
 <p>CNN捲積有一些特性，</p>
-<p>(1)平移不變性(shift-invariance)<br>(2)局部性(local connectivity)<br>(3)多尺度(multi-scale)</p>
+<p>(1)平移不變性(shift-invariance) (2)局部性(local connectivity) (3)多尺度(multi-scale)</p>
 <p>這些特性，暫且把它們稱作<strong>組合性(Compositionality)</strong>，讓CNN捲積只能處理在歐幾里德空間(Euclidean Structure)的數據。</p>
-<p><img src="https://cdn-images-1.medium.com/max/1200/1*1VJDP6qDY9-ExTuQVEOlVg.gif" alt></p>
+<p><img src="https://cdn-images-1.medium.com/max/1200/1*1VJDP6qDY9-ExTuQVEOlVg.gif"></p>
 <p>什麼數據是Euclidean Structure的數據呢？最經典的就是影像(image)，影片(video)和音頻(speech/voice)，自然語言文本(text)透過特殊處理，也可以固定維度，投影到歐幾里德空間來操作。</p>
 <p>然而，有一些數據結構是<strong>Non-Euclidean</strong>的，例如:</p>
 <ul>
 <li><strong>生物/化學分子 Chemical/Biological Graphs</strong></li>
 </ul>
-<p><img src="https://pic2.zhimg.com/80/v2-4a3967e884e413c9d0c5e10af79884c7_hd.jpg" alt></p>
+<p><img src="https://pic2.zhimg.com/80/v2-4a3967e884e413c9d0c5e10af79884c7_hd.jpg"></p>
 <ul>
-<li><strong>Citation Networks / Social Networks</strong> </li>
+<li><strong>Citation Networks / Social Networks</strong></li>
 </ul>
-<p><img src="https://i.imgur.com/gH7YZra.jpg" alt></p>
+<p><img src="https://i.imgur.com/gH7YZra.jpg"></p>
 <ul>
 <li><strong>Unstructured Graphs</strong>: 例如<strong>3D點雲</strong>, 或者是<strong>半監督學習</strong></li>
 </ul>
-<p><img src="http://paradise.caltech.edu/~yli/software/pceditor/3dselect2.png" alt></p>
-<p><img src="https://cdn-images-1.medium.com/max/1600/1*IPmyksaiYuo0fflQSUB4BQ.png" alt></p>
-<p>Non-Euclidean的數據，大致上可以當作<strong>圖</strong>(Graph)來理解。也就是可以理解成$G=(V,E)$，由頂點(vertex)和邊(edge)所構成的一種資料格式。</p>
+<p><img src="http://paradise.caltech.edu/~yli/software/pceditor/3dselect2.png"></p>
+<p><img src="https://cdn-images-1.medium.com/max/1600/1*IPmyksaiYuo0fflQSUB4BQ.png"></p>
+<p>Non-Euclidean的數據，大致上可以當作<strong>圖</strong>(Graph)來理解。也就是可以理解成<span class="math inline">\(G=(V,E)\)</span>，由頂點(vertex)和邊(edge)所構成的一種資料格式。</p>
 <p><strong>Euclidean數據可以當作是Non-Euclidean的一種特例</strong>。因此對Non-Euclidean理解和處理，可以在Euclidean數據上通用，這就是為什麼Non-Euclidean數據的表示法學習有其重要性。</p>
-<p><img src="https://i.imgur.com/VVYfDyx.png" alt></p>
+<p><img src="https://i.imgur.com/VVYfDyx.png"></p>
 <p>對2D Convolution來說，Graph Convolution的想法來自於把在<strong>圖像域</strong>(image domain)運作得很好的2D捲積神經網路方法，拿到<strong>圖域</strong>(graph domain)來使用。</p>
 <hr>
 <p>要了解圖的Convolution，要先了解<strong>Convolution本質上是一種aggregation操作</strong>，它是一種局部加權平均的運算。</p>
-<p>對圖的頂點(vertex)來說，局部指的是它的鄰居，而它的鄰居由邊(edge)的存在與否，綜合邊的權重(weight)大小去定義。簡單起見，把有邊(edge)的權重都定為$1$，沒邊(edge)的權重都定為$0$。</p>
-<p>為了探討圖的性質，我們用<strong>度矩陣</strong>(degree matrix)$D$ 和 <strong>鄰居矩陣</strong>(adjacency matrix)$A$來表示一個圖。度矩陣是一個對角矩陣(diagonal matrix)，度矩陣對角線上的值就是該頂點連接著幾條邊，也就是鄰居矩陣的<strong>列和</strong>。</p>
-<p>假如是無向圖，鄰居矩陣是對稱矩陣(symmetric matrix)。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">D = np.sum(A, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.imgur.com/sJHABf0.png" alt></p>
-<p>另外圖論(graph theory)還定義一個東西叫做<strong>Laplacian Matrix</strong> $L$，它最簡單的定義是$D-A$。在數學及物理中，Laplacian或稱Laplace operator(拉普拉斯算子)是歐幾里得空間中的一個函數的<strong>梯度的散度</strong>給出的微分算子，通常寫成 $\Delta$、$\nabla^2$ 或 $\nabla \cdot \nabla$。可以粗糙的視為歐幾里得空間中二次微分操作。</p>
+<p>對圖的頂點(vertex)來說，局部指的是它的鄰居，而它的鄰居由邊(edge)的存在與否，綜合邊的權重(weight)大小去定義。簡單起見，把有邊(edge)的權重都定為<span class="math inline">\(1\)</span>，沒邊(edge)的權重都定為<span class="math inline">\(0\)</span>。</p>
+<p>為了探討圖的性質，我們用<strong>度矩陣</strong>(degree matrix)<span class="math inline">\(D\)</span> 和 <strong>鄰居矩陣</strong>(adjacency matrix)<span class="math inline">\(A\)</span>來表示一個圖。度矩陣是一個對角矩陣(diagonal matrix)，度矩陣對角線上的值就是該頂點連接著幾條邊，也就是鄰居矩陣的<strong>列和</strong>。</p>
+<p>假如是無向圖，鄰居矩陣是對稱矩陣(symmetric matrix)。 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">D = np.sum(A, <span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://i.imgur.com/sJHABf0.png"></p>
+<p>另外圖論(graph theory)還定義一個東西叫做<strong>Laplacian Matrix</strong> <span class="math inline">\(L\)</span>，它最簡單的定義是<span class="math inline">\(D-A\)</span>。在數學及物理中，Laplacian或稱Laplace operator(拉普拉斯算子)是歐幾里得空間中的一個函數的<strong>梯度的散度</strong>給出的微分算子，通常寫成 <span class="math inline">\(\Delta\)</span>、<span class="math inline">\(\nabla^2\)</span> 或 <span class="math inline">\(\nabla \cdot \nabla\)</span>。可以粗糙的視為歐幾里得空間中二次微分操作。</p>
 <p><a href="https://www.zhihu.com/question/54504471/answer/630639025" target="_blank" rel="noopener">Laplacian物理上的解釋可以是能量的流失或是物質擴散</a>，放在圖論上來說，即是該頂點<strong>信息</strong>(message)<strong>傳播</strong>(propagation)。</p>
-<p>圖卷積神經網路(GCN)的<strong>單層</strong>操作，則可以(但不一定要)定義成：<br>$$Y=LX$$</p>
-<p>因為圖的Laplacian Matrix最簡單的定義是$L=D-A$：<br>$$Y=LX=DX-AX$$</p>
-<p>對單一節點來說，式中的 $AX$ 可以視為本次操作(每單位時間)鄰居預計要從我身上拿走的訊息量。 $DX$ 可以視為是本次操作<strong>每個節點尚未進行傳播前，本來擁有的訊息量</strong>，即是<strong>上次操作</strong>(上一個單位時間)每個頂點從它的鄰居頂點取得的訊息量。兩者相減，就是本次操作後訊息傳播的狀況。</p>
+<p>圖卷積神經網路(GCN)的<strong>單層</strong>操作，則可以(但不一定要)定義成： <span class="math display">\[Y=LX\]</span></p>
+<p>因為圖的Laplacian Matrix最簡單的定義是<span class="math inline">\(L=D-A\)</span>： <span class="math display">\[Y=LX=DX-AX\]</span></p>
+<p>對單一節點來說，式中的 <span class="math inline">\(AX\)</span> 可以視為本次操作(每單位時間)鄰居預計要從我身上拿走的訊息量。 <span class="math inline">\(DX\)</span> 可以視為是本次操作<strong>每個節點尚未進行傳播前，本來擁有的訊息量</strong>，即是<strong>上次操作</strong>(上一個單位時間)每個頂點從它的鄰居頂點取得的訊息量。兩者相減，就是本次操作後訊息傳播的狀況。</p>
 <p>我們用程式碼來了解一下圖的訊息傳遞：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定義鄰居矩陣A，故意使它不對稱，有向圖比較容易看到訊息傳遞的狀況</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">A = np.matrix([</span><br><span class="line">    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>], </span><br><span class="line">    [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">    [<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>]],</span><br><span class="line">    dtype=float</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 畫圖程式(optional)</span></span><br><span class="line"><span class="keyword">import</span> networkx <span class="keyword">as</span> nx</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">G=nx.DiGraph(A)</span><br><span class="line">nx.draw(G, with_labels=<span class="literal">True</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.imgur.com/lWAHzMi.png" alt><br>這個有向圖可以理解為，每次的$L$操作，每個節點會依照箭頭指出的方向去提供每個鄰居節點它所要求攜帶的訊息。</p>
+<p><img src="https://i.imgur.com/lWAHzMi.png"> 這個有向圖可以理解為，每次的<span class="math inline">\(L\)</span>操作，每個節點會依照箭頭指出的方向去提供每個鄰居節點它所要求攜帶的訊息。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定義初始特徵</span></span><br><span class="line">X = np.matrix([[ <span class="number">100.</span>, <span class="number">-100.</span>],</span><br><span class="line">                [ <span class="number">1.</span>, <span class="number">-1.</span>],</span><br><span class="line">                [ <span class="number">2.</span>, <span class="number">-2.</span>],</span><br><span class="line">                [ <span class="number">3.</span>, <span class="number">-3.</span>]])</span><br><span class="line"></span><br><span class="line">A * X</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#輸出：</span><br><span class="line">matrix([[   1.,   -1.],</span><br><span class="line">        [   5.,   -5.],</span><br><span class="line">        [   0.,    0.],</span><br><span class="line">        [ 102., -102.]])</span><br></pre></td></tr></table></figure>
-
 <p>從以上例子就可以明顯看出，因為label=3的節點提供訊息給label=0和label=2的節點，結果得到一個很大的訊息更新。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">D = np.diag(np.array(np.sum(A, <span class="number">1</span>)).flatten())</span><br><span class="line">L = D-A</span><br><span class="line">L*X</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#輸出：</span><br><span class="line">matrix([[ 99., -99.],</span><br><span class="line">        [ -3.,   3.],</span><br><span class="line">        [  0.,   0.],</span><br><span class="line">        [-96.,  96.]])</span><br></pre></td></tr></table></figure>
-
 <p>結果label=3的節點更新完後，有了很大的變化。</p>
 <p>我們這時候應該也發現了一些問題。由於圖中沒有自環，訊息只能被鄰居不斷取走，而沒有因應自身訊息做調整。這就像是預估一個人薪水多高時，只考慮他的朋友薪水多高，而沒有把該人的自身條件考慮進去，顯然不太合理。因此，因應任務需要，可以考慮增加自環。</p>
-<p>$$\hat{A} = A+I$$</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 增加自環</span></span><br><span class="line">I = np.diag([<span class="number">1</span>]*A.shape[<span class="number">0</span>])</span><br><span class="line">A_hat = A + I</span><br><span class="line">A_hat</span><br></pre></td></tr></table></figure>
-
+<p><span class="math display">\[\hat{A} = A+I\]</span> <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 增加自環</span></span><br><span class="line">I = np.diag([<span class="number">1</span>]*A.shape[<span class="number">0</span>])</span><br><span class="line">A_hat = A + I</span><br><span class="line">A_hat</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#輸出：</span><br><span class="line">matrix([[1., 1., 0., 0.],</span><br><span class="line">        [0., 1., 1., 1.],</span><br><span class="line">        [0., 0., 1., 0.],</span><br><span class="line">        [1., 0., 1., 1.]])</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A_hat * X</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#輸出：</span><br><span class="line">matrix([[ 101., -101.],</span><br><span class="line">        [   6.,   -6.],</span><br><span class="line">        [   2.,   -2.],</span><br><span class="line">        [ 105., -105.]])</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">D_hat = np.diag(np.array(np.sum(A, <span class="number">1</span>)).flatten())</span><br><span class="line">L_hat = D_hat-A_hat</span><br><span class="line">L_hat*X</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#輸出：</span><br><span class="line">matrix([[ -1.,   1.],</span><br><span class="line">        [ -4.,   4.],</span><br><span class="line">        [ -2.,   2.],</span><br><span class="line">        [-99.,  99.]])</span><br></pre></td></tr></table></figure>
-
-<p>以上的傳播矩陣，不管是$A$還是$\hat{A}$還是$L$，與convolution相似的地方在於，它們都是一種<strong>局部的aggregation操作</strong>。然而，convolution的局部連接數是固定的，這裡卻不是這樣，每個頂點鄰居數目可能都不同。</p>
-<p>所以，不管是$A$還是$\hat{A}$還是$L$，都還需要進行歸一化處理。以免偏好鄰居較多的節點，讓鄰居較多的節點傳播比較多的訊息量。歸一化處理的方法有兩種：(1)算術平均(2)幾何平均</p>
-<p>於是多定義了兩種<strong>Laplacian Matrix</strong><br>(1)算術平均<br>$$L^{rw}=D^{-1}L$$<br>(2)幾何平均<br>$$L^{sym}=D^{-0.5}LD^{-0.5}$$ </p>
-<p>其中，幾何平均受極端值影響較小，$L^{sym}$是GCN中較為常用的 Laplacian Matrix 。</p>
-<p>故，圖卷積神經網路(GCN)的<strong>單層</strong>操作，也可以(但不一定要)定義成：<br>$$Y=L^{sym}X$$</p>
+<p>以上的傳播矩陣，不管是<span class="math inline">\(A\)</span>還是<span class="math inline">\(\hat{A}\)</span>還是<span class="math inline">\(L\)</span>，與convolution相似的地方在於，它們都是一種<strong>局部的aggregation操作</strong>。然而，convolution的局部連接數是固定的，這裡卻不是這樣，每個頂點鄰居數目可能都不同。</p>
+<p>所以，不管是<span class="math inline">\(A\)</span>還是<span class="math inline">\(\hat{A}\)</span>還是<span class="math inline">\(L\)</span>，都還需要進行歸一化處理。以免偏好鄰居較多的節點，讓鄰居較多的節點傳播比較多的訊息量。歸一化處理的方法有兩種：(1)算術平均(2)幾何平均</p>
+<p>於是多定義了兩種<strong>Laplacian Matrix</strong> (1)算術平均 <span class="math display">\[L^{rw}=D^{-1}L\]</span> (2)幾何平均 <span class="math display">\[L^{sym}=D^{-0.5}LD^{-0.5}\]</span></p>
+<p>其中，幾何平均受極端值影響較小，<span class="math inline">\(L^{sym}\)</span>是GCN中較為常用的 Laplacian Matrix 。</p>
+<p>故，圖卷積神經網路(GCN)的<strong>單層</strong>操作，也可以(但不一定要)定義成： <span class="math display">\[Y=L^{sym}X\]</span></p>
 <hr>
-<h2 id="Eigendecomposition-Spectral-decomposition-of-Laplacian-Matrix"><a href="#Eigendecomposition-Spectral-decomposition-of-Laplacian-Matrix" class="headerlink" title="Eigendecomposition / Spectral decomposition of Laplacian Matrix"></a>Eigendecomposition / Spectral decomposition of Laplacian Matrix</h2><p>假設為無向圖，此時$L^{sym}$ (以下簡稱$L$) 是可以被對角化的 (原因不詳述)</p>
-<p><img src="https://www.zhihu.com/equation?tex=+L%3D+U%5Cleft%28%5Cbegin%7Bmatrix%7D%5Clambda_1+%26+%5C%5C%26%5Cddots+%5C%5C+%26%26%5Clambda_n+%5Cend%7Bmatrix%7D%5Cright%29+U%5E%7B-1%7D" alt></p>
-<p>由於$U$是正交矩陣，$UU^T=I$，$U^T=U^{-1}$</p>
-<p><img src="https://www.zhihu.com/equation?tex=L%3D+U%5Cleft%28%5Cbegin%7Bmatrix%7D%5Clambda_1+%26+%5C%5C%26%5Cddots+%5C%5C+%26%26%5Clambda_n+%5Cend%7Bmatrix%7D%5Cright%29+U%5E%7BT%7D" alt></p>
-<p>其中，$U$是已知的，$\lambda_l$ <strong>特徵值</strong>是未知要求取的。但我們並不直接去求或是去優化$\lambda_l$ 。</p>
-<p>對一個捲積函數 $h$ 而言，可以用<strong>傅立葉轉換的卷積定理</strong><br><img src="https://www.zhihu.com/equation?tex=%28f%2Ah%29_G%3DU%28%28U%5ETh%29%5Codot%28U%5ETf%29%29+%5Cqquad%282%29" alt></p>
+<h2 id="eigendecomposition-spectral-decomposition-of-laplacian-matrix">Eigendecomposition / Spectral decomposition of Laplacian Matrix</h2>
+<p>假設為無向圖，此時<span class="math inline">\(L^{sym}\)</span> (以下簡稱<span class="math inline">\(L\)</span>) 是可以被對角化的 (原因不詳述)</p>
+<p><img src="https://www.zhihu.com/equation?tex=+L%3D+U%5Cleft%28%5Cbegin%7Bmatrix%7D%5Clambda_1+%26+%5C%5C%26%5Cddots+%5C%5C+%26%26%5Clambda_n+%5Cend%7Bmatrix%7D%5Cright%29+U%5E%7B-1%7D"></p>
+<p>由於<span class="math inline">\(U\)</span>是正交矩陣，<span class="math inline">\(UU^T=I\)</span>，<span class="math inline">\(U^T=U^{-1}\)</span></p>
+<p><img src="https://www.zhihu.com/equation?tex=L%3D+U%5Cleft%28%5Cbegin%7Bmatrix%7D%5Clambda_1+%26+%5C%5C%26%5Cddots+%5C%5C+%26%26%5Clambda_n+%5Cend%7Bmatrix%7D%5Cright%29+U%5E%7BT%7D"></p>
+<p>其中，<span class="math inline">\(U\)</span>是已知的，<span class="math inline">\(\lambda_l\)</span> <strong>特徵值</strong>是未知要求取的。但我們並不直接去求或是去優化<span class="math inline">\(\lambda_l\)</span> 。</p>
+<p>對一個捲積函數 <span class="math inline">\(h\)</span> 而言，可以用<strong>傅立葉轉換的卷積定理</strong> <img src="https://www.zhihu.com/equation?tex=%28f%2Ah%29_G%3DU%28%28U%5ETh%29%5Codot%28U%5ETf%29%29+%5Cqquad%282%29"></p>
 <p>去證明(原因不詳述)，捲積後的結果為：</p>
-<p><img src="https://www.zhihu.com/equation?tex=%28f%2Ah%29_G%3D+U%5Cleft%28%5Cbegin%7Bmatrix%7D%5Chat+h%28%5Clambda_1%29+%26+%5C%5C%26%5Cddots+%5C%5C+%26%26%5Chat+h%28%5Clambda_n%29+%5Cend%7Bmatrix%7D%5Cright%29+U%5ETf+%5Cqquad%281%29" alt></p>
-<p>其中$\hat{h}(\lambda_{l})$要設計成:</p>
-<p><img src="https://www.zhihu.com/equation?tex=%5Chat%7Bh%7D%28%5Clambda_l%29%3D%5Csum_%7Bi%3D1%7D%5E%7BN%7D%7Bh%28i%29+u_l%5E%2A%28i%29%7D" alt><br>其中$u^{<em>}$是*</em>傅立葉轉換正交特徵向量**的共軛轉置</p>
-<h2 id="第一代GCN"><a href="#第一代GCN" class="headerlink" title="第一代GCN"></a>第一代GCN</h2><p><a href="https://arxiv.org/abs/1312.6203" target="_blank" rel="noopener">Spectral Networks and Locally Connected Networks on Graphs(2013)</a></p>
-<p>直接令 $\theta_l=\hat{h}(\lambda_{l})$ </p>
+<p><img src="https://www.zhihu.com/equation?tex=%28f%2Ah%29_G%3D+U%5Cleft%28%5Cbegin%7Bmatrix%7D%5Chat+h%28%5Clambda_1%29+%26+%5C%5C%26%5Cddots+%5C%5C+%26%26%5Chat+h%28%5Clambda_n%29+%5Cend%7Bmatrix%7D%5Cright%29+U%5ETf+%5Cqquad%281%29"></p>
+<p>其中<span class="math inline">\(\hat{h}(\lambda_{l})\)</span>要設計成:</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Chat%7Bh%7D%28%5Clambda_l%29%3D%5Csum_%7Bi%3D1%7D%5E%7BN%7D%7Bh%28i%29+u_l%5E%2A%28i%29%7D"> 其中<span class="math inline">\(u^{*}\)</span>是<strong>傅立葉轉換正交特徵向量</strong>的共軛轉置</p>
+<h2 id="第一代gcn">第一代GCN</h2>
+<p><a href="https://arxiv.org/abs/1312.6203" target="_blank" rel="noopener">Spectral Networks and Locally Connected Networks on Graphs(2013)</a></p>
+<p>直接令 <span class="math inline">\(\theta_l=\hat{h}(\lambda_{l})\)</span></p>
 <p>GCN的<strong>單層</strong>操作:</p>
-<p><img src="https://www.zhihu.com/equation?tex=+y_%7Boutput%7D%3D%5Csigma+%5Cleft%28U+g_%5Ctheta%28%5CLambda%29+U%5ET+x+%5Cright%29+%5Cqquad%283%29" alt><br><img src="https://www.zhihu.com/equation?tex=+g_%5Ctheta%28%5CLambda%29%3D%5Cleft%28%5Cbegin%7Bmatrix%7D%5Ctheta_1+%26%5C%5C%26%5Cddots+%5C%5C+%26%26%5Ctheta_n+%5Cend%7Bmatrix%7D%5Cright%29" alt></p>
+<p><img src="https://www.zhihu.com/equation?tex=+y_%7Boutput%7D%3D%5Csigma+%5Cleft%28U+g_%5Ctheta%28%5CLambda%29+U%5ET+x+%5Cright%29+%5Cqquad%283%29"> <img src="https://www.zhihu.com/equation?tex=+g_%5Ctheta%28%5CLambda%29%3D%5Cleft%28%5Cbegin%7Bmatrix%7D%5Ctheta_1+%26%5C%5C%26%5Cddots+%5C%5C+%26%26%5Ctheta_n+%5Cend%7Bmatrix%7D%5Cright%29"></p>
 <p>第一代圖捲積跟一般CNN卷積的差異：</p>
-<p>(1) 卷積核(kernel)只在主對角線上，並不需要是二維的，卷積核個數與頂點數(n)相同<br>(2) 卷積核(kernel)在主對角線上的矩陣需要經過離散傅立葉矩陣轉換($U$,$U^T$)</p>
-<h2 id="第二代GCN"><a href="#第二代GCN" class="headerlink" title="第二代GCN"></a>第二代GCN</h2><p><a href="http://papers.nips.cc/paper/6081-convolutional-neural-networks-on-graphs-with-fast-localized-spectral-filtering" target="_blank" rel="noopener">Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering(2016)</a></p>
-<p>設計：<br>$\hat{h}(\lambda_{l})$=<img src="https://www.zhihu.com/equation?tex=%5Csum_%7Bj%3D0%7D%5EK+%5Calpha_j+%5Clambda%5Ej_l" alt><br>K是K-hop neighbor</p>
-<p>可以導出GCN的<strong>單層</strong>操作（推導過程略）:<br><img src="https://www.zhihu.com/equation?tex=+y_%7Boutput%7D%3D%5Csigma+%5Cleft%28+%5Csum_%7Bj%3D0%7D%5EK+%5Calpha_j+L%5Ej+x+%5Cright%29+%5Cqquad%285%29" alt><br>卷積核(kernel)是$\alpha_j$</p>
+<ol type="1">
+<li>卷積核(kernel)只在主對角線上，並不需要是二維的，卷積核個數與頂點數(n)相同</li>
+<li>卷積核(kernel)在主對角線上的矩陣需要經過離散傅立葉矩陣轉換(<span class="math inline">\(U\)</span>,<span class="math inline">\(U^T\)</span>)</li>
+</ol>
+<h2 id="第二代gcn">第二代GCN</h2>
+<p><a href="http://papers.nips.cc/paper/6081-convolutional-neural-networks-on-graphs-with-fast-localized-spectral-filtering" target="_blank" rel="noopener">Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering(2016)</a></p>
+<p>設計： <span class="math inline">\(\hat{h}(\lambda_{l})\)</span>=<img src="https://www.zhihu.com/equation?tex=%5Csum_%7Bj%3D0%7D%5EK+%5Calpha_j+%5Clambda%5Ej_l"> K是K-hop neighbor</p>
+<p>可以導出GCN的<strong>單層</strong>操作（推導過程略）: <img src="https://www.zhihu.com/equation?tex=+y_%7Boutput%7D%3D%5Csigma+%5Cleft%28+%5Csum_%7Bj%3D0%7D%5EK+%5Calpha_j+L%5Ej+x+%5Cright%29+%5Cqquad%285%29"> 卷積核(kernel)是<span class="math inline">\(\alpha_j\)</span></p>
 <p>第二代圖捲積跟第一代圖捲積的差異：</p>
-<p>(1) 第一代沒有局部性，卷積核個數與頂點數(n)相同，第二代只有K個參數，計算複雜度降低很多</p>
-<p>(2) 第一代每次向前傳播都要計算一次 $U\ diag(\theta)\ U^T$ 三者的乘積，第二代直接拿$L$乘上$\alpha_j$，計算簡單一些，但複雜度仍是$O(n^2)$</p>
-<p>(3) 第二代有Parameter Sharing的部份</p>
+<ol type="1">
+<li><p>第一代沒有局部性，卷積核個數與頂點數(n)相同，第二代只有K個參數，計算複雜度降低很多</p></li>
+<li><p>第一代每次向前傳播都要計算一次 <span class="math inline">\(U\ diag(\theta)\ U^T\)</span> 三者的乘積，第二代直接拿<span class="math inline">\(L\)</span>乘上<span class="math inline">\(\alpha_j\)</span>，計算簡單一些，但複雜度仍是<span class="math inline">\(O(n^2)\)</span></p></li>
+<li><p>第二代有Parameter Sharing的部份</p></li>
+</ol>
 <hr>
 <p>對GCN的介紹暫時到這邊，有空再來分享paper和程式碼。實際上程式碼並沒有理論來的那麼複雜，用numpy自己刻一個是絕對可行的，假如用deep learning套件，實際上也只有用到fc layer。基於PyTorch有非常好用且完整的套件<strong>torch_geometric</strong>，雖無法handle大圖，但拿來上手可以很快進入狀況。</p>
 <hr>
@@ -989,14 +984,10 @@ K( {\mathbf{x}}_1, {\mathbf{x}}_n ), \ K( {\mathbf{x}}_2, {\mathbf{x}}_n), ... ,
 <hr>
 <p>Reference:</p>
 <ul>
-<li><p>[A Comprehensive Survey on Graph Neural](Networks <a href="https://arxiv.org/pdf/1901.00596.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/1901.00596.pdf</a>)</p>
-</li>
-<li><p><a href="https://www.zhihu.com/question/54504471" target="_blank" rel="noopener">如何理解 Graph Convolutional Network（GCN）？</a></p>
-</li>
-<li><p><a href="https://arxiv.org/abs/1312.6203" target="_blank" rel="noopener">Spectral Networks and Locally Connected Networks on Graphs(2013)</a></p>
-</li>
-<li><p><a href="http://papers.nips.cc/paper/6081-convolutional-neural-networks-on-graphs-with-fast-localized-spectral-filtering" target="_blank" rel="noopener">Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering(2016)</a></p>
-</li>
+<li><p><a href="Networks%20https://arxiv.org/pdf/1901.00596.pdf">A Comprehensive Survey on Graph Neural</a></p></li>
+<li><p><a href="https://www.zhihu.com/question/54504471" target="_blank" rel="noopener">如何理解 Graph Convolutional Network（GCN）？</a></p></li>
+<li><p><a href="https://arxiv.org/abs/1312.6203" target="_blank" rel="noopener">Spectral Networks and Locally Connected Networks on Graphs(2013)</a></p></li>
+<li><p><a href="http://papers.nips.cc/paper/6081-convolutional-neural-networks-on-graphs-with-fast-localized-spectral-filtering" target="_blank" rel="noopener">Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering(2016)</a></p></li>
 </ul>
 
           
@@ -1141,63 +1132,72 @@ K( {\mathbf{x}}_1, {\mathbf{x}}_n ), \ K( {\mathbf{x}}_2, {\mathbf{x}}_n), ... ,
           
             <p>本文淺顯直白的介紹反向傳播算法（BP 算法, The Back Propagation Algorithm）的理解思路, 計算過程和程式實現</p>
 <hr>
-<p>我們考慮一個最簡單的layer,這個layer有兩個input $x_1, x_2$ 和1個output $y_1$:<br><img src="https://i.imgur.com/eRqdjfG.png" alt></p>
-<p>則數學式可以寫成:<br>$$ y_1 = w_{1}x_1+w_{2}x_2$$</p>
-<p>上式的$w$下標是跟著$x$在跑, 考慮到$y$可以擴展成$y_j$(不只一個$y$), 我們改一下$w$的下標, 也把$y$的標號考慮進去:<br>$$ y_1 = w_{11}x_1+w_{12}x_2$$</p>
-<p>其中$w_{ji}$的第一個下標$j$是跟著$y$在跑, 而$i$是跟著$x$在跑, 整個式子可以寫成矩陣形式:<br>$$Y=WX$$</p>
-<p>其中令輸入$X$有$n$維, 輸出$Y$有$m$維:</p>
-<p>$$X=[x_1,\ x_2, … , x_i,\ …\ ,\ x_n\ ]^T$$</p>
-<p>$$Y=[y_1,\ y_2, … , y_j,\ …\ ,\ y_m\ ]^T$$</p>
-<p>$$ W=<br>{\left[ \begin{array}{ccc}<br>w_{11},\ w_{12}, … ,\ w_{1n}\ \<br>… , w_{ji}, … \<br>w_{m1},\ w_{m2}, … ,\ w_{mn}\ \<br>\end{array}\right ]} = { w_{ji} }_{m \times n}$$</p>
-<p>通常我們還會把上式加個<strong>偏置</strong>(bias) $B$:</p>
-<p>$$Y=WX+B$$</p>
-<p>$B$維度會和$Y$相同<br>$$B=[b_1,\ b_2, … , b_j,\ …\ ,\ b_m\ ]^T$$</p>
-<p>通常還會再加個可微分的激活函數$\sigma$來增加其非線性:</p>
-<p>$$Y=\sigma(WX+B)$$</p>
-<p>以上是”前饋”(forward)的部分</p>
+<p>我們考慮一個最簡單的layer,這個layer有兩個input <span class="math inline">\(x_1, x_2\)</span> 和1個output <span class="math inline">\(y_1\)</span>: <img src="https://i.imgur.com/eRqdjfG.png"></p>
+<p>則數學式可以寫成: <span class="math display">\[ y_1 = w_{1}x_1+w_{2}x_2\]</span></p>
+<p>上式的<span class="math inline">\(w\)</span>下標是跟著<span class="math inline">\(x\)</span>在跑, 考慮到<span class="math inline">\(y\)</span>可以擴展成<span class="math inline">\(y_j\)</span>(不只一個<span class="math inline">\(y\)</span>), 我們改一下<span class="math inline">\(w\)</span>的下標, 也把<span class="math inline">\(y\)</span>的標號考慮進去: <span class="math display">\[ y_1 = w_{11}x_1+w_{12}x_2\]</span></p>
+<p>其中<span class="math inline">\(w_{ji}\)</span>的第一個下標<span class="math inline">\(j\)</span>是跟著<span class="math inline">\(y\)</span>在跑, 而<span class="math inline">\(i\)</span>是跟著<span class="math inline">\(x\)</span>在跑, 整個式子可以寫成矩陣形式: <span class="math display">\[Y=WX\]</span></p>
+<p>其中令輸入<span class="math inline">\(X\)</span>有<span class="math inline">\(n\)</span>維, 輸出<span class="math inline">\(Y\)</span>有<span class="math inline">\(m\)</span>維:</p>
+<p><span class="math display">\[X=[x_1,\ x_2, ... , x_i,\ ...\ ,\ x_n\ ]^T\]</span></p>
+<p><span class="math display">\[Y=[y_1,\ y_2, ... , y_j,\ ...\ ,\ y_m\ ]^T\]</span></p>
+<p><span class="math display">\[ W= 
+{\left[ \begin{array}{ccc} 
+w_{11},\ w_{12}, ... ,\ w_{1n}\ \\
+... , w_{ji}, ... \\
+w_{m1},\ w_{m2}, ... ,\ w_{mn}\ \\
+\end{array}\right ]} = \{ w_{ji} \}_{m \times n}\]</span></p>
+<p>通常我們還會把上式加個<strong>偏置</strong>(bias) <span class="math inline">\(B\)</span>:</p>
+<p><span class="math display">\[Y=WX+B\]</span></p>
+<p><span class="math inline">\(B\)</span>維度會和<span class="math inline">\(Y\)</span>相同 <span class="math display">\[B=[b_1,\ b_2, ... , b_j,\ ...\ ,\ b_m\ ]^T\]</span></p>
+<p>通常還會再加個可微分的激活函數<span class="math inline">\(\sigma\)</span>來增加其非線性:</p>
+<p><span class="math display">\[Y=\sigma(WX+B)\]</span></p>
+<p>以上是&quot;前饋&quot;(forward)的部分</p>
 <hr>
-<p>接下來考慮”反向傳播”(backward)的部分,假設損失函數(loss function)$\mathbb{J}$ 有$d$維, 下標用$k$表示:</p>
-<p>$$ Assume\ lost function\ \mathbb{J}\ has\ dim\ d $$</p>
-<p>$$\mathbb{J}=[J_1,\ J_2, … , J_k,\ …\ ,\ J_d\ ]^T$$</p>
-<p>損失梯度(Gradient)要從輸出$Y$流回輸入$X$, 並流到$W$和$B$以進行權重和偏置的更新(update), 也就是可以把問題定義成:</p>
-<p>$$ Given\  \frac{\partial J_k}{\partial y_{j}} , find\ \frac{\partial J_k}{\partial w_{ji}},\ \frac{\partial J_k}{\partial b_j} , and\ \frac{\partial J_k}{\partial x_i}   $$</p>
-<p>梯度傳遞會用到微積分的<strong>鏈鎖率</strong>(Chain Rule), 為了方便起見我們多定義一個$Z$:</p>
-<p>$$ Z = WX+B $$</p>
-<p>$$ Y = \sigma (Z) $$</p>
-<p>$$Z=[z_1,\ z_2, … , z_j,\ …\ ,\ z_m\ ]^T$$</p>
-<p>可以發現, 上式和原本的$Y=\sigma(WX+B)$並沒有不同, 只是計算過程中間多一個$Z$</p>
-<p>定義輸出梯度(已知):<br>$$\nabla_{out} = \frac{\partial J_k}{\partial y_{j}}$$</p>
-<p>定義輸入梯度(待求):<br>$$\nabla_{in} = \frac{\partial J_k}{\partial x_{i}}$$</p>
+<p>接下來考慮&quot;反向傳播&quot;(backward)的部分,假設損失函數(loss function)<span class="math inline">\(\mathbb{J}\)</span> 有<span class="math inline">\(d\)</span>維, 下標用<span class="math inline">\(k\)</span>表示:</p>
+<p><span class="math display">\[ Assume\ lost function\ \mathbb{J}\ has\ dim\ d \]</span></p>
+<p><span class="math display">\[\mathbb{J}=[J_1,\ J_2, ... , J_k,\ ...\ ,\ J_d\ ]^T\]</span></p>
+<p>損失梯度(Gradient)要從輸出<span class="math inline">\(Y\)</span>流回輸入<span class="math inline">\(X\)</span>, 並流到<span class="math inline">\(W\)</span>和<span class="math inline">\(B\)</span>以進行權重和偏置的更新(update), 也就是可以把問題定義成:</p>
+<p><span class="math display">\[ Given\  \frac{\partial J_k}{\partial y_{j}} , find\ \frac{\partial J_k}{\partial w_{ji}},\ \frac{\partial J_k}{\partial b_j} \, and\ \frac{\partial J_k}{\partial x_i}   \]</span></p>
+<p>梯度傳遞會用到微積分的<strong>鏈鎖率</strong>(Chain Rule), 為了方便起見我們多定義一個<span class="math inline">\(Z\)</span>:</p>
+<p><span class="math display">\[ Z = WX+B \]</span></p>
+<p><span class="math display">\[ Y = \sigma (Z) \]</span></p>
+<p><span class="math display">\[Z=[z_1,\ z_2, ... , z_j,\ ...\ ,\ z_m\ ]^T\]</span></p>
+<p>可以發現, 上式和原本的<span class="math inline">\(Y=\sigma(WX+B)\)</span>並沒有不同, 只是計算過程中間多一個<span class="math inline">\(Z\)</span></p>
+<p>定義輸出梯度(已知): <span class="math display">\[\nabla_{out} = \frac{\partial J_k}{\partial y_{j}}\]</span></p>
+<p>定義輸入梯度(待求): <span class="math display">\[\nabla_{in} = \frac{\partial J_k}{\partial x_{i}}\]</span></p>
 <p>用鏈鎖率(Chain Rule)將待求的項目展開:</p>
-<p>$$ \frac{\partial J_k}{\partial w_{ji}} = \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  \frac{\partial z_j}{\partial w_{ji}} = G_{kj}\ \frac{\partial z_j}{\partial w_{ji}} \ \ …(1)$$</p>
-<p>$$ \frac{\partial J_k}{\partial b_{j}} =  \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  \frac{\partial z_j}{\partial b_{j}}  = G_{kj}\ \frac{\partial z_j}{\partial b_{j}}  \ \ …(2)$$ </p>
-<p>$$ \frac{\partial J_k}{\partial x_{i}}\ (\nabla_{in}) =  \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  \frac{\partial z_j}{\partial x_{i}}  = G_{kj}\ \frac{\partial z_j}{\partial x_{i}}  \ \ …(3)$$ </p>
-<p>上列各式重複$\frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}$的部分, 方便起見, 定義中介梯度$\mathbb{G}$:</p>
-<p>$$ \mathbb{G}\ =  \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  $$ </p>
-<p>$$ \mathbb{G}=<br>{\left[ \begin{array}{ccc}<br>G_{11},\ G_{12}, … ,\ G_{1m}\ \<br>… , G_{kj}, … \<br>G_{k1},\ G_{k2}, … ,\ G_{dm}\ \<br>\end{array}\right ]} ={ G_{kj}}_{d \times m}$$</p>
-<p>至此, 整個計算流程(計算圖)已經很明朗了,<br>我們的目的就是找到:</p>
-<p>$$ Find\ \ \mathbb{G},\  \frac{\partial z_j}{\partial w_{ji}} ,\  \frac{\partial z_j}{\partial b_{j}} ,\  \frac{\partial z_j}{\partial x_{i}} $$ </p>
+<p><span class="math display">\[ \frac{\partial J_k}{\partial w_{ji}} = \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  \frac{\partial z_j}{\partial w_{ji}} = G_{kj}\ \frac{\partial z_j}{\partial w_{ji}} \ \ ...(1)\]</span></p>
+<p><span class="math display">\[ \frac{\partial J_k}{\partial b_{j}} =  \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  \frac{\partial z_j}{\partial b_{j}}  = G_{kj}\ \frac{\partial z_j}{\partial b_{j}}  \ \ ...(2)\]</span></p>
+<p><span class="math display">\[ \frac{\partial J_k}{\partial x_{i}}\ (\nabla_{in}) =  \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  \frac{\partial z_j}{\partial x_{i}}  = G_{kj}\ \frac{\partial z_j}{\partial x_{i}}  \ \ ...(3)\]</span></p>
+<p>上列各式重複<span class="math inline">\(\frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}\)</span>的部分, 方便起見, 定義中介梯度<span class="math inline">\(\mathbb{G}\)</span>:</p>
+<p><span class="math display">\[ \mathbb{G}\ =  \frac{\partial J_k}{\partial y_{j}} \frac{\partial y_j}{\partial z_j}  \]</span></p>
+<p><span class="math display">\[ \mathbb{G}= 
+{\left[ \begin{array}{ccc} 
+G_{11},\ G_{12}, ... ,\ G_{1m}\ \\
+... , G_{kj}, ... \\
+G_{k1},\ G_{k2}, ... ,\ G_{dm}\ \\
+\end{array}\right ]} =\{ G_{kj}\}_{d \times m}\]</span></p>
+<p>至此, 整個計算流程(計算圖)已經很明朗了, 我們的目的就是找到:</p>
+<p><span class="math display">\[ Find\ \ \mathbb{G},\  \frac{\partial z_j}{\partial w_{ji}} ,\  \frac{\partial z_j}{\partial b_{j}} ,\  \frac{\partial z_j}{\partial x_{i}} \]</span></p>
 <p>只要算出上述四項, 就可以得到所求</p>
-<ol>
-<li>計算$G_{kj}$</li>
+<ol type="1">
+<li>計算<span class="math inline">\(G_{kj}\)</span></li>
 </ol>
-<p>$$  \frac{\partial y_j}{\partial z_j}  = \sigma ‘ (z_j) $$ </p>
-<p>$$ =&gt; G_{kj} = \frac{\partial J_k}{\partial y_{j}}\ \sigma ‘ (z_j) = (dout)\ \sigma ‘ (z_j)$$ </p>
-<ol start="2">
-<li>計算$\frac{\partial z_j}{\partial w_{ji}} ,\  \frac{\partial z_j}{\partial b_{j}} ,\  \frac{\partial z_j}{\partial x_{i}}$</li>
+<p><span class="math display">\[  \frac{\partial y_j}{\partial z_j}  = \sigma &#39; (z_j) \]</span></p>
+<p><span class="math display">\[ =&gt; G_{kj} = \frac{\partial J_k}{\partial y_{j}}\ \sigma &#39; (z_j) = (dout)\ \sigma &#39; (z_j)\]</span></p>
+<ol start="2" type="1">
+<li>計算<span class="math inline">\(\frac{\partial z_j}{\partial w_{ji}} ,\  \frac{\partial z_j}{\partial b_{j}} ,\  \frac{\partial z_j}{\partial x_{i}}\)</span></li>
 </ol>
-<p>$$  \frac{\partial z_j}{\partial w_{ji}}  = x_{i} $$ </p>
-<p>$$  \frac{\partial z_j}{\partial b_{j}}  = 1 $$ </p>
-<p>$$  \frac{\partial z_j}{\partial x_{i}}  = w_{ji} $$ </p>
-<ol start="3">
+<p><span class="math display">\[  \frac{\partial z_j}{\partial w_{ji}}  = x_{i} \]</span></p>
+<p><span class="math display">\[  \frac{\partial z_j}{\partial b_{j}}  = 1 \]</span></p>
+<p><span class="math display">\[  \frac{\partial z_j}{\partial x_{i}}  = w_{ji} \]</span></p>
+<ol start="3" type="1">
 <li>代入式(1)(2)(3), 得到結果</li>
 </ol>
-<p>$$ =&gt; \frac{\partial J_k}{\partial w_{ji}} = G_{kj} \ x_i\ ,\ \ \frac{\partial J_k}{\partial b_{j}} = G_{kj} , \ \ \frac{\partial J_k}{\partial x_{i}}\ (\nabla_{in}) =  G_{kj}\ w_{ji}\ $$</p>
+<p><span class="math display">\[ =&gt; \frac{\partial J_k}{\partial w_{ji}} = G_{kj} \ x_i\ ,\\ \ \frac{\partial J_k}{\partial b_{j}} = G_{kj} , \\ \ \frac{\partial J_k}{\partial x_{i}}\ (\nabla_{in}) =  G_{kj}\ w_{ji}\ \]</span></p>
 <hr>
-<p>以上就是整個BP演算法”單層”的計算過程, 化成python程式碼如下:</p>
+<p>以上就是整個BP演算法&quot;單層&quot;的計算過程, 化成python程式碼如下:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">backward</span><span class="params">(self,dout)</span>:</span>  </span><br><span class="line">    Z,x = self.cache</span><br><span class="line">    G = dout * self.dactive_fn(Z)</span><br><span class="line">    din = G.dot(self.W.T)</span><br><span class="line">    dW = x.T.dot(G) </span><br><span class="line">    db = G.sum(axis=<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> din,dW,db</span><br></pre></td></tr></table></figure>
-
-<p>程式碼來源: <a href="https://github.com/purelyvivid/DeepLearning_practice/blob/master/3.%20BP%20algo.py" target="_blank" rel="noopener">https://github.com/purelyvivid/DeepLearning_practice/blob/master/3.%20BP%20algo.py</a> (用numpy寫一個BP algorithm)</p>
+<p>程式碼來源: https://github.com/purelyvivid/DeepLearning_practice/blob/master/3.%20BP%20algo.py (用numpy寫一個BP algorithm)</p>
 
           
         

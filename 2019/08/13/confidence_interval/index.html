@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="統計中的信賴區間(Confidence interval)是什麼?信賴區間(Confidence interval，CI)這個詞經常被提及，但是否真的了解其含義呢?  推論統計(statistical inference)中的參數估計(Parameter Estimation)是利用樣本統計量或其分配來估計母體參數, 例如想估計全班的身高平均, 假設全班的身高為常態分布, 隨機抽樣幾個人算身高平均">
+<meta name="description" content="統計中的信賴區間(Confidence interval)是什麼? 信賴區間(Confidence interval，CI)這個詞經常被提及，但是否真的了解其含義呢? 推論統計(statistical inference)中的參數估計(Parameter Estimation)是利用樣本統計量或其分配來估計母體參數, 例如想估計全班的身高平均, 假設全班的身高為常態分布, 隨機抽樣幾個人算身高平均">
 <meta name="keywords" content="Machine Learning, Deep Learning, Graph Neural Network, Natural Language Processing">
 <meta property="og:type" content="article">
 <meta property="og:title" content="統計中的信賴區間(Confidence interval)介紹">
 <meta property="og:url" content="https://purelyvivid.github.io/2019/08/13/confidence_interval/index.html">
 <meta property="og:site_name" content="Hui-Yu Huang&#39;s Blog">
-<meta property="og:description" content="統計中的信賴區間(Confidence interval)是什麼?信賴區間(Confidence interval，CI)這個詞經常被提及，但是否真的了解其含義呢?  推論統計(statistical inference)中的參數估計(Parameter Estimation)是利用樣本統計量或其分配來估計母體參數, 例如想估計全班的身高平均, 假設全班的身高為常態分布, 隨機抽樣幾個人算身高平均">
+<meta property="og:description" content="統計中的信賴區間(Confidence interval)是什麼? 信賴區間(Confidence interval，CI)這個詞經常被提及，但是否真的了解其含義呢? 推論統計(statistical inference)中的參數估計(Parameter Estimation)是利用樣本統計量或其分配來估計母體參數, 例如想估計全班的身高平均, 假設全班的身高為常態分布, 隨機抽樣幾個人算身高平均">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:updated_time" content="2019-08-13T04:59:27.024Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="統計中的信賴區間(Confidence interval)介紹">
-<meta name="twitter:description" content="統計中的信賴區間(Confidence interval)是什麼?信賴區間(Confidence interval，CI)這個詞經常被提及，但是否真的了解其含義呢?  推論統計(statistical inference)中的參數估計(Parameter Estimation)是利用樣本統計量或其分配來估計母體參數, 例如想估計全班的身高平均, 假設全班的身高為常態分布, 隨機抽樣幾個人算身高平均">
+<meta name="twitter:description" content="統計中的信賴區間(Confidence interval)是什麼? 信賴區間(Confidence interval，CI)這個詞經常被提及，但是否真的了解其含義呢? 推論統計(statistical inference)中的參數估計(Parameter Estimation)是利用樣本統計量或其分配來估計母體參數, 例如想估計全班的身高平均, 假設全班的身高為常態分布, 隨機抽樣幾個人算身高平均">
 
 
 
@@ -342,31 +342,31 @@
       
 
       
-        <h1 id="統計中的信賴區間-Confidence-interval-是什麼"><a href="#統計中的信賴區間-Confidence-interval-是什麼" class="headerlink" title="統計中的信賴區間(Confidence interval)是什麼?"></a>統計中的信賴區間(Confidence interval)是什麼?</h1><p><strong>信賴區間</strong>(Confidence interval，CI)這個詞經常被提及，但是否真的了解其含義呢? </p>
+        <h1 id="統計中的信賴區間confidence-interval是什麼">統計中的信賴區間(Confidence interval)是什麼?</h1>
+<p><strong>信賴區間</strong>(Confidence interval，CI)這個詞經常被提及，但是否真的了解其含義呢?</p>
 <p><strong>推論統計</strong>(statistical inference)中的<strong>參數估計</strong>(Parameter Estimation)是利用<strong>樣本統計量</strong>或其分配來估計<strong>母體參數</strong>, 例如想估計全班的身高平均, 假設全班的身高為常態分布, 隨機抽樣幾個人算身高平均, 就把它當成全班的平均, 這就是參數估計(平均值是常態分佈的一個參數)</p>
 <p><strong>參數估計</strong>又分成<strong>點估計</strong>（point estimate）和<strong>區間估計</strong>（Interval Estimation）</p>
 <p><strong>點估計</strong>顧名思義就是估計一個點, 把這個點當作母體參數, 而<strong>區間估計</strong>就是把母體參數視為一個區間範圍, 並不侷限在一固定的點</p>
 <p>區間估計通常先求出<strong>點估計</strong>值, 然後在一個<strong>信賴水準</strong>下導出一個<strong>信賴區間</strong>, 這個信賴區間是一組上下限, 而信賴水準是指該區間包含母體參數的可信度</p>
 <p>舉例來說, 若我們想對母體平均值做一個信賴水準95%的區間估計, 而假設資料是常態分布, 則樣本平均:</p>
-<p>$$ \bar{X} \sim N(\mu , \frac{\sigma^2}{n} ) $$</p>
+<p><span class="math display">\[ \bar{X} \sim N(\mu , \frac{\sigma^2}{n} ) \]</span></p>
 <p>將它標準化:</p>
-<p>$$ Z = \frac{\bar{X}-\mu}{ \frac{\sigma}{\sqrt{n}}} $$</p>
+<p><span class="math display">\[ Z = \frac{\bar{X}-\mu}{ \frac{\sigma}{\sqrt{n}}} \]</span></p>
 <p>信賴水準95%表示:</p>
-<p>$$P(-z\leq Z\leq z)= 1- \alpha =0.95 $$</p>
-<p>$z$是quantile, 可以用程式語言python套件scipy的<code>scipy.stats.norm.ppf(1-0.025)</code>求得, ppf ($\Phi^{-1}$)是cdf的反函數</p>
+<p><span class="math display">\[P(-z\leq Z\leq z)= 1- \alpha =0.95 \]</span></p>
+<p><span class="math inline">\(z\)</span>是quantile, 可以用程式語言python套件scipy的<code>scipy.stats.norm.ppf(1-0.025)</code>求得, ppf (<span class="math inline">\(\Phi^{-1}\)</span>)是cdf的反函數</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scipy.stats <span class="keyword">as</span> stats</span><br><span class="line">stats.norm.ppf(<span class="number">1</span><span class="number">-0.025</span>)</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>1.959963984540054</p>
 </blockquote>
-<p>故$z$約等於$1.96$:</p>
-<p>$$P(-1.96\leq Z\leq 1.96)= 1- \alpha =0.95 $$</p>
-<p>將標準化後的$Z$代入:</p>
-<p>$$P(-1.96\leq \frac{\bar{X}-\mu}{ \frac{\sigma}{\sqrt{n}}} \leq 1.96)= 1- \alpha =0.95 $$</p>
+<p>故<span class="math inline">\(z\)</span>約等於<span class="math inline">\(1.96\)</span>:</p>
+<p><span class="math display">\[P(-1.96\leq Z\leq 1.96)= 1- \alpha =0.95 \]</span></p>
+<p>將標準化後的<span class="math inline">\(Z\)</span>代入:</p>
+<p><span class="math display">\[P(-1.96\leq \frac{\bar{X}-\mu}{ \frac{\sigma}{\sqrt{n}}} \leq 1.96)= 1- \alpha =0.95 \]</span></p>
 <p>整理一下:</p>
-<p>$$ P(\bar{X}-1.96 \frac{\sigma}{\sqrt{n}} \leq \mu  \leq \bar{X}+ 1.96  \frac{\sigma}{\sqrt{n}} )= 0.95$$</p>
-<p>這表示我們可以從樣本平均數$\bar{X}$, 樣本數$n$, 和母體標準差$\sigma$估算95%信心水準的信賴區間為:</p>
-<p>$$ [ \bar{X}-1.96 \frac{\sigma}{\sqrt{n}} , \bar{X}+ 1.96  \frac{\sigma}{\sqrt{n}} ] $$</p>
+<p><span class="math display">\[ P(\bar{X}-1.96 \frac{\sigma}{\sqrt{n}} \leq \mu  \leq \bar{X}+ 1.96  \frac{\sigma}{\sqrt{n}} )= 0.95\]</span></p>
+<p>這表示我們可以從樣本平均數<span class="math inline">\(\bar{X}\)</span>, 樣本數<span class="math inline">\(n\)</span>, 和母體標準差<span class="math inline">\(\sigma\)</span>估算95%信心水準的信賴區間為:</p>
+<p><span class="math display">\[ [ \bar{X}-1.96 \frac{\sigma}{\sqrt{n}} , \bar{X}+ 1.96  \frac{\sigma}{\sqrt{n}} ] \]</span></p>
 
       
     </div>
@@ -544,7 +544,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#統計中的信賴區間-Confidence-interval-是什麼"><span class="nav-number">1.</span> <span class="nav-text">統計中的信賴區間(Confidence interval)是什麼?</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#統計中的信賴區間confidence-interval是什麼"><span class="nav-number">1.</span> <span class="nav-text">統計中的信賴區間(Confidence interval)是什麼?</span></a></li></ol></div>
             
 
           </div>

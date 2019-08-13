@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="最大似然估計法(Maximum Likelihood Estimation, MLE)是一種頻率學派的方法, 是統計上很常用的點估計方法 似然函數(likelihood function)是一種在參數$\theta$下觀察到樣本出現的條件機率: $$ L(\theta) = \prod^{n}_{i=1} {f(x_i|\theta)} $$ 多取一個log, 比較方便後續微分, 叫做對數似然函數">
+<meta name="description" content="最大似然估計法(Maximum Likelihood Estimation, MLE)是一種頻率學派的方法, 是統計上很常用的點估計方法 似然函數(likelihood function)是一種在參數\(\theta\)下觀察到樣本出現的條件機率: \[ L(\theta) = \prod^{n}_{i=1} {f(x_i|\theta)} \] 多取一個log, 比較方便後續微分, 叫做對數似然">
 <meta name="keywords" content="Machine Learning, Deep Learning, Graph Neural Network, Natural Language Processing">
 <meta property="og:type" content="article">
 <meta property="og:title" content="最大似然估計法(Maximum Likelihood Estimation, MLE)介紹">
 <meta property="og:url" content="https://purelyvivid.github.io/2019/08/13/MLE/index.html">
 <meta property="og:site_name" content="Hui-Yu Huang&#39;s Blog">
-<meta property="og:description" content="最大似然估計法(Maximum Likelihood Estimation, MLE)是一種頻率學派的方法, 是統計上很常用的點估計方法 似然函數(likelihood function)是一種在參數$\theta$下觀察到樣本出現的條件機率: $$ L(\theta) = \prod^{n}_{i=1} {f(x_i|\theta)} $$ 多取一個log, 比較方便後續微分, 叫做對數似然函數">
+<meta property="og:description" content="最大似然估計法(Maximum Likelihood Estimation, MLE)是一種頻率學派的方法, 是統計上很常用的點估計方法 似然函數(likelihood function)是一種在參數\(\theta\)下觀察到樣本出現的條件機率: \[ L(\theta) = \prod^{n}_{i=1} {f(x_i|\theta)} \] 多取一個log, 比較方便後續微分, 叫做對數似然">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:updated_time" content="2019-08-13T04:59:56.394Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="最大似然估計法(Maximum Likelihood Estimation, MLE)介紹">
-<meta name="twitter:description" content="最大似然估計法(Maximum Likelihood Estimation, MLE)是一種頻率學派的方法, 是統計上很常用的點估計方法 似然函數(likelihood function)是一種在參數$\theta$下觀察到樣本出現的條件機率: $$ L(\theta) = \prod^{n}_{i=1} {f(x_i|\theta)} $$ 多取一個log, 比較方便後續微分, 叫做對數似然函數">
+<meta name="twitter:description" content="最大似然估計法(Maximum Likelihood Estimation, MLE)是一種頻率學派的方法, 是統計上很常用的點估計方法 似然函數(likelihood function)是一種在參數\(\theta\)下觀察到樣本出現的條件機率: \[ L(\theta) = \prod^{n}_{i=1} {f(x_i|\theta)} \] 多取一個log, 比較方便後續微分, 叫做對數似然">
 
 
 
@@ -343,31 +343,31 @@
 
       
         <p><strong>最大似然估計法</strong>(Maximum Likelihood Estimation, MLE)是一種頻率學派的方法, 是統計上很常用的<strong>點估計</strong>方法</p>
-<p><strong>似然函數</strong>(likelihood function)是一種在參數$\theta$下觀察到樣本出現的條件機率:</p>
-<p>$$ L(\theta) = \prod^{n}_{i=1} {f(x_i|\theta)} $$</p>
+<p><strong>似然函數</strong>(likelihood function)是一種在參數<span class="math inline">\(\theta\)</span>下觀察到樣本出現的條件機率:</p>
+<p><span class="math display">\[ L(\theta) = \prod^{n}_{i=1} {f(x_i|\theta)} \]</span></p>
 <p>多取一個log, 比較方便後續微分, 叫做對數似然函數(log likelihood function):</p>
-<p>$$l(\theta)=log(L(\theta))=\prod^{n}_{i=1} { log \ f(x_i|\theta)}$$</p>
-<p>以下所有的$L$都可以用$l$來代替</p>
-<p><strong>最大似然估計法</strong>(Maximum Likelihood Estimation, MLE)是藉由給定的樣本尋找最可能的$\theta$, 藉此來最大化<strong>似然函數</strong>(likelihood function)的方法</p>
-<p>$$ \max_{\theta}\ L(\theta)$$</p>
-<p>假設<strong>存在</strong>一個唯一的$\hat{\theta}$使得似然函數最大化, 此時:</p>
-<p>$$ \frac{ \partial L(\theta) }{\partial \theta} = 0\ ,\ \frac{ \partial L^2(\theta) }{\partial \theta^2} &lt; 0 $$</p>
-<p>其中$x_i$是已知的樣本, 假定$f$是含未知參數但形式已知的函式(假設可微分), 此時可藉由上式求解最佳母體參數$\hat{\theta}$, 求得後, 可以用該參數的母體來進行新樣本的推論</p>
+<p><span class="math display">\[l(\theta)=log(L(\theta))=\prod^{n}_{i=1} { log \ f(x_i|\theta)}\]</span></p>
+<p>以下所有的<span class="math inline">\(L\)</span>都可以用<span class="math inline">\(l\)</span>來代替</p>
+<p><strong>最大似然估計法</strong>(Maximum Likelihood Estimation, MLE)是藉由給定的樣本尋找最可能的<span class="math inline">\(\theta\)</span>, 藉此來最大化<strong>似然函數</strong>(likelihood function)的方法</p>
+<p><span class="math display">\[ \max_{\theta}\ L(\theta)\]</span></p>
+<p>假設<strong>存在</strong>一個唯一的<span class="math inline">\(\hat{\theta}\)</span>使得似然函數最大化, 此時:</p>
+<p><span class="math display">\[ \frac{ \partial L(\theta) }{\partial \theta} = 0\ ,\ \frac{ \partial L^2(\theta) }{\partial \theta^2} &lt; 0 \]</span></p>
+<p>其中<span class="math inline">\(x_i\)</span>是已知的樣本, 假定<span class="math inline">\(f\)</span>是含未知參數但形式已知的函式(假設可微分), 此時可藉由上式求解最佳母體參數<span class="math inline">\(\hat{\theta}\)</span>, 求得後, 可以用該參數的母體來進行新樣本的推論</p>
 <hr>
 <p>若假設樣本為常態分佈:</p>
-<p>$$ X_1, X_2, …, X_n \sim i.i.d.\ N(\mu, \sigma) $$</p>
-<p>參數$\theta$則為$\mu$和$\sigma$, 此時的$f$是常態分佈的pdf(機率密度函數):</p>
-<p>$$ f(x| \mu, \sigma^2) = \frac{1}{\sqrt{2 \pi \sigma^2 }}\ exp(- \frac{(x-\mu)^2}{2 \sigma^2})$$</p>
-<p>此時的最大對數似然函數, 經過一次微分等於零的操作後, 可以解得$\hat{\mu}$和$\hat{\sigma}$:</p>
-<p>$$ \hat{\mu} = \bar{x} = \sum^n_{i=1} \frac{x_i}{n}$$</p>
-<p>$$ \hat{\sigma}^2 =  \frac{1}{n}\sum^n_{i=1} (x_i-\bar{x})^2$$</p>
+<p><span class="math display">\[ X_1, X_2, ..., X_n \sim i.i.d.\ N(\mu, \sigma) \]</span></p>
+<p>參數<span class="math inline">\(\theta\)</span>則為<span class="math inline">\(\mu\)</span>和<span class="math inline">\(\sigma\)</span>, 此時的<span class="math inline">\(f\)</span>是常態分佈的pdf(機率密度函數):</p>
+<p><span class="math display">\[ f(x| \mu, \sigma^2) = \frac{1}{\sqrt{2 \pi \sigma^2 }}\ exp(- \frac{(x-\mu)^2}{2 \sigma^2})\]</span></p>
+<p>此時的最大對數似然函數, 經過一次微分等於零的操作後, 可以解得<span class="math inline">\(\hat{\mu}\)</span>和<span class="math inline">\(\hat{\sigma}\)</span>:</p>
+<p><span class="math display">\[ \hat{\mu} = \bar{x} = \sum^n_{i=1} \frac{x_i}{n}\]</span></p>
+<p><span class="math display">\[ \hat{\sigma}^2 =  \frac{1}{n}\sum^n_{i=1} (x_i-\bar{x})^2\]</span></p>
 <p>以上就是我們常用的母體平均值和母體變異數估計公式, 是假設常態分佈的情況下推導出來</p>
-<p>其中, 參數$\hat{\mu}$的估計量滿足<strong>不偏性</strong>(non-bias):</p>
-<p>$$E[\hat{\mu}] = \mu$$</p>
-<p>參數$\hat{\sigma}^2$的估計量卻<strong>沒有</strong>滿足不偏性:</p>
-<p>$$E[\hat{\sigma}^2] = \frac{n-1}{n}\ \hat{\sigma}^2$$</p>
-<p>這就是樣本變異量要除以$n-1$的原因:</p>
-<p>$$ s^2 =  \frac{1}{n-1}\sum^n_{i=1} (x_i-\bar{x})^2$$</p>
+<p>其中, 參數<span class="math inline">\(\hat{\mu}\)</span>的估計量滿足<strong>不偏性</strong>(non-bias):</p>
+<p><span class="math display">\[E[\hat{\mu}] = \mu\]</span></p>
+<p>參數<span class="math inline">\(\hat{\sigma}^2\)</span>的估計量卻<strong>沒有</strong>滿足不偏性:</p>
+<p><span class="math display">\[E[\hat{\sigma}^2] = \frac{n-1}{n}\ \hat{\sigma}^2\]</span></p>
+<p>這就是樣本變異量要除以<span class="math inline">\(n-1\)</span>的原因:</p>
+<p><span class="math display">\[ s^2 =  \frac{1}{n-1}\sum^n_{i=1} (x_i-\bar{x})^2\]</span></p>
 <p>這樣代進去才會讓母體變異數正確地滿足不偏性</p>
 
       
