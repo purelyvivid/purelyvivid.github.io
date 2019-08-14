@@ -253,6 +253,350 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://purelyvivid.github.io/2019/08/14/Central_Limit_Theorem/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hui-Yu Huang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar_2016.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hui-Yu Huang's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/14/Central_Limit_Theorem/" itemprop="url">中央極限定理(Central Limit Theorem, CLT)介紹</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-08-14T12:00:00+08:00">
+                2019-08-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Statistics/" itemprop="url" rel="index">
+                    <span itemprop="name">Statistics</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>中央極限定理: 假設一母體平均數<span class="math inline">\(\mu\)</span>, 標準差<span class="math inline">\(\sigma\)</span>, 從中隨機抽取樣本數<span class="math inline">\(n\)</span>, 當<span class="math inline">\(n\)</span>夠大時, <strong>樣本平均數</strong>的<strong>抽樣分配</strong>會近似於常態分配</p>
+<p>假設 <span class="math display">\[ X_1, X_2, ..., X_n \sim i.i.d.\ N(\mu, \sigma^2) \]</span></p>
+<p><span class="math display">\[S_n = X_1+...+X_n \]</span> 則中央極限定理: <span class="math display">\[Z_n = \frac{S_n-n\mu}{\sigma\sqrt{n}} \to N(0,1)\ \ as\ \ n \to \infty \]</span></p>
+<p>可寫成: <span class="math display">\[Z_n=\frac{\bar{X}-\mu}{\sigma/\sqrt{n}}\]</span></p>
+<p>故:</p>
+<p><span class="math display">\[E(\bar{X})=\mu_{\bar{X}}=\mu\]</span></p>
+<p><span class="math display">\[Var(\bar{X})=\sigma_{\bar{X}}^2=\frac{\sigma}{n}\]</span></p>
+<p>一般實務上樣本數<span class="math inline">\(n\)</span>大於<span class="math inline">\(30\)</span>就視為CTL, 也就是樣本平均數為常態分配, 且<strong>樣本平均數的平均數</strong>近似於母體平均數, <strong>樣本平均數的變異數</strong>近似於母體變異數除以n</p>
+<hr>
+<p>例如:</p>
+<p>有一枚硬幣投到正面機率P(X=1)=0.8, 投到反面機率P(X=0)=0.2, 假設連續投160次, 其中(平均來說)投到正面次數大於130次的機率是多少?</p>
+<p>Step 1. 計算母體平均數與母體變異數</p>
+<p>假定硬幣投值隨機變數<span class="math inline">\(X\)</span>為伯努利分布(Bernoulli distribution)</p>
+<p><span class="math display">\[\mu = E(X)=p=0.8\]</span></p>
+<p><span class="math display">\[\sigma^2 = Var(X)=p(1-p)=0.16\]</span></p>
+<p>Step 2. 計算<span class="math inline">\(\bar{X}\)</span>的平均數與<span class="math inline">\(\bar{X}\)</span>的變異數</p>
+<p><span class="math display">\[\mu_{\bar{X}} = \mu =0.8\]</span></p>
+<p><span class="math display">\[\sigma_{\bar{X}}^2 = \frac{\sigma^2}{n}=\frac{0.16}{160}=0.001\]</span></p>
+<p>Step 3. 用標準常態分佈的cdf求解</p>
+<p><span class="math display">\[P(X_1+...+X_n&gt;130) = P(\bar{X}&gt;\frac{130}{160}) = P(Z&gt;\frac{\frac{130}{160}-0.8}{\sqrt{160}})\]</span></p>
+<p>利用python套件scipy來求解<span class="math inline">\(\Phi^{-1}(Z)\)</span></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> scipy.stats <span class="keyword">as</span> stats</span><br><span class="line">z = (<span class="number">130.</span>/<span class="number">160.</span> - <span class="number">0.8</span>) / np.sqrt(<span class="number">0.001</span>)</span><br><span class="line">print( stats.norm.cdf(z, loc = <span class="number">0</span>, scale = <span class="number">1</span>) )</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>0.6536836079790194</p>
+</blockquote>
+<p>故</p>
+<p><span class="math display">\[P(X_1+...+X_n&gt;130)=1-\Phi^{-1}(\frac{\frac{130}{160}-0.8}{\sqrt{160}})=1-0.6536 = 0.3464\]</span></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://purelyvivid.github.io/2019/08/14/Bayes_Estimation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hui-Yu Huang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar_2016.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hui-Yu Huang's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/14/Bayes_Estimation/" itemprop="url">貝氏估計法(Bayes Estimation)介紹</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">發表於</span>
+              
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-08-14T11:00:00+08:00">
+                2019-08-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分類於</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Statistics/" itemprop="url" rel="index">
+                    <span itemprop="name">Statistics</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="貝氏定理bayes-theorem">貝氏定理（Bayes Theorem）</h2>
+<p><span class="math display">\[P(A|B)=\frac{P(A \cap B)}{P(B)}=\frac{P(B|A) \times P(A)}{P(B)}\]</span></p>
+<p>其中<span class="math inline">\(P(A|B)\)</span>是已知<span class="math inline">\(B\)</span>發生的情況下, <span class="math inline">\(A\)</span>發生的機率, 稱作<span class="math inline">\(A\)</span>的<strong>事後機率</strong>或<strong>後驗機率</strong>(posterior probability)</p>
+<p>而<span class="math inline">\(P(A)\)</span>, <span class="math inline">\(P(B)\)</span>稱作<strong>事前機率</strong>或<strong>先驗機率</strong>(prior probability)</p>
+<p><span class="math inline">\(P(B|A)\)</span>是已知<span class="math inline">\(A\)</span>發生的情況下, <span class="math inline">\(B\)</span>發生的機率, 在此稱作概似函數(likelihood function)</p>
+<p>可以把貝氏定理理解成:</p>
+<p><span class="math display">\[ 後驗機率 = \frac{ {概似函數}  \times {先驗機率} }{標準化常量} \]</span></p>
+<p><span class="math display">\[P(A|B)=\frac{P(B|A) \times P(A)}{P(B)}\]</span></p>
+<h2 id="貝氏統計">貝氏統計</h2>
+<p>相對於<a href="https://purelyvivid.github.io/2019/08/13/MLE/">之前介紹的MLE是頻率學派的點估計</a>, 其分布的參數是固定值, 貝式學派自成一格, 它將分布的參數視為一個<strong>隨機變數</strong>, 也就是每個參數來自一個機率分布, 而非固定值</p>
+<p>因此貝氏統計中不但可以算<strong>樣本統計量的機率</strong>, 還可以算<strong>參數的機率</strong></p>
+<p>假設<span class="math inline">\(X\)</span>服從分布pdf 為<span class="math inline">\(P(x|\theta)\)</span>, 利用貝氏定理寫成連續的形式:</p>
+<p><span class="math display">\[f_{x|\theta}(\theta)=\frac{ f(x_1,...,x_n|\theta) f_{\theta}(\theta)}{\int \ f(x_1,...,x_n|\theta) f_{\theta}(\theta)\ d\theta}\]</span></p>
+<p>其中, <span class="math inline">\(f_{x|\theta}(\theta)\)</span> : 後驗機率 <span class="math inline">\(f(x_1,...,x_n|\theta)\)</span> : 概似函數 <span class="math inline">\(f_{\theta}(\theta)\)</span> : 先驗機率 <span class="math inline">\(\int \ f(x_1,...,x_n|\theta) f_{\theta}(\theta)\ d\theta\)</span> : 標準化常量</p>
+<hr>
+<p>若假設樣本為常態分佈:</p>
+<p><span class="math display">\[ X_1, X_2, ..., X_n \sim i.i.d.\ N(\mu, \sigma^2) \]</span></p>
+<p>假設<span class="math inline">\(\mu\)</span>未知, <span class="math inline">\(\sigma^2\)</span>已知 試用貝氏統計來估計<span class="math inline">\(\mu\)</span></p>
+<p>假設<span class="math inline">\(\mu \sim N(\mu_{0}, \sigma_{0}^2)\)</span>是一個normal distribution, 則<span class="math inline">\(\mu\)</span>的pdf可以寫成:</p>
+<p><span class="math display">\[ f(\mu)=\frac{1}{\sqrt{2\pi\sigma_{0}^2} } \ exp(- \frac{(\mu-\mu_{0})^2}{2\sigma_{0}^2})\]</span></p>
+<p>樣本的pdf可以寫成: <span class="math display">\[
+f(x_1,...,x_n|\mu)=\frac{1}{ {(2\pi\sigma^2)}^{\frac{n}{2}} }\ exp(- \frac{\sum_{i=1}^n(x_i-\mu)^2}{2\sigma^2})\]</span></p>
+<p>兩者的joint probability為:</p>
+<p><span class="math display">\[f(x_1,...,x_n,\mu) =  \frac{1}{ {(2\pi\sigma^2)}^{\frac{n}{2}} \sqrt{2\pi\sigma_{0}^2} }\ exp(- \frac{\sum_{i=1}^n(x_i-\mu)^2}{2\sigma^2} - \frac{(\mu-\mu_{0})^2}{2\sigma_{0}^2})\]</span></p>
+<p>上式經過整理得到:</p>
+<p><span class="math display">\[f(x_1,...,x_n,\mu) =\frac{1}{\sqrt{2\pi\sigma_{post}^2} } \ exp(- \frac{(\mu-\mu_{post})^2}{2\sigma_{post}^2})\ h(x_1,...,x_n,\sigma, \mu_0, \sigma_0)\]</span></p>
+<p>上式整理過程中, 與<span class="math inline">\(\mu\)</span>沒有相關的函數一律包含進<span class="math inline">\(h\)</span>函數中</p>
+<p>因此後驗機率可以得到:</p>
+<p><span class="math display">\[f(\mu|x_1,...,x_n) =\frac{1}{\sqrt{2\pi\sigma_{post}^2} } \ exp(- \frac{(\mu-\mu_{post})^2}{2\sigma_{post}^2})\ h&#39;(x_1,...,x_n,\sigma, \mu_0, \sigma_0)\]</span></p>
+<p>上式整理過程中, 由於<span class="math inline">\(x_1,...,x_n\)</span>與<span class="math inline">\(\mu\)</span>沒有相關, <span class="math inline">\(h\)</span>函數也與<span class="math inline">\(\mu\)</span>沒有相關 , 與<span class="math inline">\(\mu\)</span>沒有相關的函數一律再把它包含進<span class="math inline">\(h&#39;\)</span>函數中</p>
+<p>發現假設<span class="math inline">\(\mu\)</span>的先驗機率為常態分佈下, <span class="math inline">\(\mu\)</span>的後驗機率也是一個常態分布, 其參數為:</p>
+<p><span class="math display">\[\mu_{post}=\frac{\frac{\sigma^2}{n}\mu_0+\sigma_0^2 \bar{x}}{\sigma_0^2+\frac{\sigma^2}{n}}\]</span></p>
+<p><span class="math display">\[\sigma_{post}^2=(\frac{1}{\sigma_0^2}+\frac{1}{\sigma^2/n})^{-1}(\frac{\sigma_0^2(\sigma^2/n)}{\sigma_0^2+\sigma^2/n})\]</span></p>
+<hr>
+<p>用<a href="https://seeing-theory.brown.edu/" target="_blank" rel="noopener">網站seeing theory</a>可以互動式的去了解統計 <img src="https://i.imgur.com/wjAJoha.png"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://purelyvivid.github.io/2019/08/13/MLE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -846,8 +1190,8 @@ K( {\mathbf{x}}_1, {\mathbf{x}}_n ), \ K( {\mathbf{x}}_2, {\mathbf{x}}_n), ... ,
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Deep-Learning-Graph/" itemprop="url" rel="index">
-                    <span itemprop="name">Deep Learning, Graph</span>
+                  <a href="/categories/Graph-Neural-Network/" itemprop="url" rel="index">
+                    <span itemprop="name">Graph Neural Network</span>
                   </a>
                 </span>
 
@@ -1281,7 +1625,7 @@ G_{k1},\ G_{k2}, ... ,\ G_{dm}\ \\
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">文章</span>
                 </a>
               </div>

@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="統計中的信賴區間(Confidence interval)是什麼? 信賴區間(Confidence interval，CI)這個詞經常被提及，但是否真的了解其含義呢? 推論統計(statistical inference)中的參數估計(Parameter Estimation)是利用樣本統計量或其分配來估計母體參數, 例如想估計全班的身高平均, 假設全班的身高為常態分布, 隨機抽樣幾個人算身高平均">
+<meta name="description" content="貝氏定理（Bayes Theorem） \[P(A|B)=\frac{P(A \cap B)}{P(B)}=\frac{P(B|A) \times P(A)}{P(B)}\] 其中\(P(A|B)\)是已知\(B\)發生的情況下, \(A\)發生的機率, 稱作\(A\)的事後機率或後驗機率(posterior probability) 而\(P(A)\), \(P(B)\)稱作事前機率或先驗機率(">
 <meta name="keywords" content="Machine Learning, Deep Learning, Graph Neural Network, Natural Language Processing">
 <meta property="og:type" content="article">
-<meta property="og:title" content="統計中的信賴區間(Confidence interval)介紹">
-<meta property="og:url" content="https://purelyvivid.github.io/2019/08/13/confidence_interval/index.html">
+<meta property="og:title" content="貝氏估計法(Bayes Estimation)介紹">
+<meta property="og:url" content="https://purelyvivid.github.io/2019/08/14/Bayes_Estimation/index.html">
 <meta property="og:site_name" content="Hui-Yu Huang&#39;s Blog">
-<meta property="og:description" content="統計中的信賴區間(Confidence interval)是什麼? 信賴區間(Confidence interval，CI)這個詞經常被提及，但是否真的了解其含義呢? 推論統計(statistical inference)中的參數估計(Parameter Estimation)是利用樣本統計量或其分配來估計母體參數, 例如想估計全班的身高平均, 假設全班的身高為常態分布, 隨機抽樣幾個人算身高平均">
+<meta property="og:description" content="貝氏定理（Bayes Theorem） \[P(A|B)=\frac{P(A \cap B)}{P(B)}=\frac{P(B|A) \times P(A)}{P(B)}\] 其中\(P(A|B)\)是已知\(B\)發生的情況下, \(A\)發生的機率, 稱作\(A\)的事後機率或後驗機率(posterior probability) 而\(P(A)\), \(P(B)\)稱作事前機率或先驗機率(">
 <meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2019-08-13T04:59:27.024Z">
+<meta property="og:image" content="https://i.imgur.com/wjAJoha.png">
+<meta property="og:updated_time" content="2019-08-14T16:43:36.378Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="統計中的信賴區間(Confidence interval)介紹">
-<meta name="twitter:description" content="統計中的信賴區間(Confidence interval)是什麼? 信賴區間(Confidence interval，CI)這個詞經常被提及，但是否真的了解其含義呢? 推論統計(statistical inference)中的參數估計(Parameter Estimation)是利用樣本統計量或其分配來估計母體參數, 例如想估計全班的身高平均, 假設全班的身高為常態分布, 隨機抽樣幾個人算身高平均">
+<meta name="twitter:title" content="貝氏估計法(Bayes Estimation)介紹">
+<meta name="twitter:description" content="貝氏定理（Bayes Theorem） \[P(A|B)=\frac{P(A \cap B)}{P(B)}=\frac{P(B|A) \times P(A)}{P(B)}\] 其中\(P(A|B)\)是已知\(B\)發生的情況下, \(A\)發生的機率, 稱作\(A\)的事後機率或後驗機率(posterior probability) 而\(P(A)\), \(P(B)\)稱作事前機率或先驗機率(">
+<meta name="twitter:image" content="https://i.imgur.com/wjAJoha.png">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://purelyvivid.github.io/2019/08/13/confidence_interval/">
+  <link rel="canonical" href="https://purelyvivid.github.io/2019/08/14/Bayes_Estimation/">
 
 
 
 
 
-  <title>統計中的信賴區間(Confidence interval)介紹 | Hui-Yu Huang's Blog</title>
+  <title>貝氏估計法(Bayes Estimation)介紹 | Hui-Yu Huang's Blog</title>
   
 
 
@@ -253,7 +255,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://purelyvivid.github.io/2019/08/13/confidence_interval/">
+    <link itemprop="mainEntityOfPage" href="https://purelyvivid.github.io/2019/08/14/Bayes_Estimation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hui-Yu Huang">
@@ -270,7 +272,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">統計中的信賴區間(Confidence interval)介紹</h1>
+          <h1 class="post-title" itemprop="name headline">貝氏估計法(Bayes Estimation)介紹</h1>
         
 
         <div class="post-meta">
@@ -282,8 +284,8 @@
               
                 <span class="post-meta-item-text">發表於</span>
               
-              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-08-13T11:00:00+08:00">
-                2019-08-13
+              <time title="創建於" itemprop="dateCreated datePublished" datetime="2019-08-14T11:00:00+08:00">
+                2019-08-14
               </time>
             
 
@@ -342,31 +344,41 @@
       
 
       
-        <h1 id="統計中的信賴區間confidence-interval是什麼">統計中的信賴區間(Confidence interval)是什麼?</h1>
-<p><strong>信賴區間</strong>(Confidence interval，CI)這個詞經常被提及，但是否真的了解其含義呢?</p>
-<p><strong>推論統計</strong>(statistical inference)中的<strong>參數估計</strong>(Parameter Estimation)是利用<strong>樣本統計量</strong>或其分配來估計<strong>母體參數</strong>, 例如想估計全班的身高平均, 假設全班的身高為常態分布, 隨機抽樣幾個人算身高平均, 就把它當成全班的平均, 這就是參數估計(平均值是常態分佈的一個參數)</p>
-<p><strong>參數估計</strong>又分成<strong>點估計</strong>（point estimate）和<strong>區間估計</strong>（Interval Estimation）</p>
-<p><strong>點估計</strong>顧名思義就是估計一個點, 把這個點當作母體參數, 而<strong>區間估計</strong>就是把母體參數視為一個區間範圍, 並不侷限在一固定的點</p>
-<p>區間估計通常先求出<strong>點估計</strong>值, 然後在一個<strong>信賴水準</strong>下導出一個<strong>信賴區間</strong>, 這個信賴區間是一組上下限, 而信賴水準是指該區間包含母體參數的可信度</p>
-<p>舉例來說, 若我們想對母體平均值做一個信賴水準95%的區間估計, 而假設資料是常態分布, 則樣本平均:</p>
-<p><span class="math display">\[ \bar{X} \sim N(\mu , \frac{\sigma^2}{n} ) \]</span></p>
-<p>將它標準化:</p>
-<p><span class="math display">\[ Z = \frac{\bar{X}-\mu}{ \frac{\sigma}{\sqrt{n}}} \]</span></p>
-<p>信賴水準95%表示:</p>
-<p><span class="math display">\[P(-z\leq Z\leq z)= 1- \alpha =0.95 \]</span></p>
-<p><span class="math inline">\(z\)</span>是quantile, 可以用程式語言python套件scipy的<code>scipy.stats.norm.ppf(1-0.025)</code>求得, ppf (<span class="math inline">\(\Phi^{-1}\)</span>)是cdf的反函數</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scipy.stats <span class="keyword">as</span> stats</span><br><span class="line">stats.norm.ppf(<span class="number">1</span><span class="number">-0.025</span>)</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>1.959963984540054</p>
-</blockquote>
-<p>故<span class="math inline">\(z\)</span>約等於<span class="math inline">\(1.96\)</span>:</p>
-<p><span class="math display">\[P(-1.96\leq Z\leq 1.96)= 1- \alpha =0.95 \]</span></p>
-<p>將標準化後的<span class="math inline">\(Z\)</span>代入:</p>
-<p><span class="math display">\[P(-1.96\leq \frac{\bar{X}-\mu}{ \frac{\sigma}{\sqrt{n}}} \leq 1.96)= 1- \alpha =0.95 \]</span></p>
-<p>整理一下:</p>
-<p><span class="math display">\[ P(\bar{X}-1.96 \frac{\sigma}{\sqrt{n}} \leq \mu  \leq \bar{X}+ 1.96  \frac{\sigma}{\sqrt{n}} )= 0.95\]</span></p>
-<p>這表示我們可以從樣本平均數<span class="math inline">\(\bar{X}\)</span>, 樣本數<span class="math inline">\(n\)</span>, 和母體標準差<span class="math inline">\(\sigma\)</span>估算95%信心水準的信賴區間為:</p>
-<p><span class="math display">\[ [ \bar{X}-1.96 \frac{\sigma}{\sqrt{n}} , \bar{X}+ 1.96  \frac{\sigma}{\sqrt{n}} ] \]</span></p>
+        <h2 id="貝氏定理bayes-theorem">貝氏定理（Bayes Theorem）</h2>
+<p><span class="math display">\[P(A|B)=\frac{P(A \cap B)}{P(B)}=\frac{P(B|A) \times P(A)}{P(B)}\]</span></p>
+<p>其中<span class="math inline">\(P(A|B)\)</span>是已知<span class="math inline">\(B\)</span>發生的情況下, <span class="math inline">\(A\)</span>發生的機率, 稱作<span class="math inline">\(A\)</span>的<strong>事後機率</strong>或<strong>後驗機率</strong>(posterior probability)</p>
+<p>而<span class="math inline">\(P(A)\)</span>, <span class="math inline">\(P(B)\)</span>稱作<strong>事前機率</strong>或<strong>先驗機率</strong>(prior probability)</p>
+<p><span class="math inline">\(P(B|A)\)</span>是已知<span class="math inline">\(A\)</span>發生的情況下, <span class="math inline">\(B\)</span>發生的機率, 在此稱作概似函數(likelihood function)</p>
+<p>可以把貝氏定理理解成:</p>
+<p><span class="math display">\[ 後驗機率 = \frac{ {概似函數}  \times {先驗機率} }{標準化常量} \]</span></p>
+<p><span class="math display">\[P(A|B)=\frac{P(B|A) \times P(A)}{P(B)}\]</span></p>
+<h2 id="貝氏統計">貝氏統計</h2>
+<p>相對於<a href="https://purelyvivid.github.io/2019/08/13/MLE/">之前介紹的MLE是頻率學派的點估計</a>, 其分布的參數是固定值, 貝式學派自成一格, 它將分布的參數視為一個<strong>隨機變數</strong>, 也就是每個參數來自一個機率分布, 而非固定值</p>
+<p>因此貝氏統計中不但可以算<strong>樣本統計量的機率</strong>, 還可以算<strong>參數的機率</strong></p>
+<p>假設<span class="math inline">\(X\)</span>服從分布pdf 為<span class="math inline">\(P(x|\theta)\)</span>, 利用貝氏定理寫成連續的形式:</p>
+<p><span class="math display">\[f_{x|\theta}(\theta)=\frac{ f(x_1,...,x_n|\theta) f_{\theta}(\theta)}{\int \ f(x_1,...,x_n|\theta) f_{\theta}(\theta)\ d\theta}\]</span></p>
+<p>其中, <span class="math inline">\(f_{x|\theta}(\theta)\)</span> : 後驗機率 <span class="math inline">\(f(x_1,...,x_n|\theta)\)</span> : 概似函數 <span class="math inline">\(f_{\theta}(\theta)\)</span> : 先驗機率 <span class="math inline">\(\int \ f(x_1,...,x_n|\theta) f_{\theta}(\theta)\ d\theta\)</span> : 標準化常量</p>
+<hr>
+<p>若假設樣本為常態分佈:</p>
+<p><span class="math display">\[ X_1, X_2, ..., X_n \sim i.i.d.\ N(\mu, \sigma^2) \]</span></p>
+<p>假設<span class="math inline">\(\mu\)</span>未知, <span class="math inline">\(\sigma^2\)</span>已知 試用貝氏統計來估計<span class="math inline">\(\mu\)</span></p>
+<p>假設<span class="math inline">\(\mu \sim N(\mu_{0}, \sigma_{0}^2)\)</span>是一個normal distribution, 則<span class="math inline">\(\mu\)</span>的pdf可以寫成:</p>
+<p><span class="math display">\[ f(\mu)=\frac{1}{\sqrt{2\pi\sigma_{0}^2} } \ exp(- \frac{(\mu-\mu_{0})^2}{2\sigma_{0}^2})\]</span></p>
+<p>樣本的pdf可以寫成: <span class="math display">\[
+f(x_1,...,x_n|\mu)=\frac{1}{ {(2\pi\sigma^2)}^{\frac{n}{2}} }\ exp(- \frac{\sum_{i=1}^n(x_i-\mu)^2}{2\sigma^2})\]</span></p>
+<p>兩者的joint probability為:</p>
+<p><span class="math display">\[f(x_1,...,x_n,\mu) =  \frac{1}{ {(2\pi\sigma^2)}^{\frac{n}{2}} \sqrt{2\pi\sigma_{0}^2} }\ exp(- \frac{\sum_{i=1}^n(x_i-\mu)^2}{2\sigma^2} - \frac{(\mu-\mu_{0})^2}{2\sigma_{0}^2})\]</span></p>
+<p>上式經過整理得到:</p>
+<p><span class="math display">\[f(x_1,...,x_n,\mu) =\frac{1}{\sqrt{2\pi\sigma_{post}^2} } \ exp(- \frac{(\mu-\mu_{post})^2}{2\sigma_{post}^2})\ h(x_1,...,x_n,\sigma, \mu_0, \sigma_0)\]</span></p>
+<p>上式整理過程中, 與<span class="math inline">\(\mu\)</span>沒有相關的函數一律包含進<span class="math inline">\(h\)</span>函數中</p>
+<p>因此後驗機率可以得到:</p>
+<p><span class="math display">\[f(\mu|x_1,...,x_n) =\frac{1}{\sqrt{2\pi\sigma_{post}^2} } \ exp(- \frac{(\mu-\mu_{post})^2}{2\sigma_{post}^2})\ h&#39;(x_1,...,x_n,\sigma, \mu_0, \sigma_0)\]</span></p>
+<p>上式整理過程中, 由於<span class="math inline">\(x_1,...,x_n\)</span>與<span class="math inline">\(\mu\)</span>沒有相關, <span class="math inline">\(h\)</span>函數也與<span class="math inline">\(\mu\)</span>沒有相關 , 與<span class="math inline">\(\mu\)</span>沒有相關的函數一律再把它包含進<span class="math inline">\(h&#39;\)</span>函數中</p>
+<p>發現假設<span class="math inline">\(\mu\)</span>的先驗機率為常態分佈下, <span class="math inline">\(\mu\)</span>的後驗機率也是一個常態分布, 其參數為:</p>
+<p><span class="math display">\[\mu_{post}=\frac{\frac{\sigma^2}{n}\mu_0+\sigma_0^2 \bar{x}}{\sigma_0^2+\frac{\sigma^2}{n}}\]</span></p>
+<p><span class="math display">\[\sigma_{post}^2=(\frac{1}{\sigma_0^2}+\frac{1}{\sigma^2/n})^{-1}(\frac{\sigma_0^2(\sigma^2/n)}{\sigma_0^2+\sigma^2/n})\]</span></p>
+<hr>
+<p>用<a href="https://seeing-theory.brown.edu/" target="_blank" rel="noopener">網站seeing theory</a>可以互動式的去了解統計 <img src="https://i.imgur.com/wjAJoha.png"></p>
 
       
     </div>
@@ -391,8 +403,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/15/kernel_model/" rel="next" title="從線性模型(Linear Model)到核模型(Kernel Model)">
-                <i class="fa fa-chevron-left"></i> 從線性模型(Linear Model)到核模型(Kernel Model)
+              <a href="/2019/08/13/MLE/" rel="next" title="最大似然估計法(Maximum Likelihood Estimation, MLE)介紹">
+                <i class="fa fa-chevron-left"></i> 最大似然估計法(Maximum Likelihood Estimation, MLE)介紹
               </a>
             
           </div>
@@ -401,8 +413,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/08/13/MLE/" rel="prev" title="最大似然估計法(Maximum Likelihood Estimation, MLE)介紹">
-                最大似然估計法(Maximum Likelihood Estimation, MLE)介紹 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/08/14/Central_Limit_Theorem/" rel="prev" title="中央極限定理(Central Limit Theorem, CLT)介紹">
+                中央極限定理(Central Limit Theorem, CLT)介紹 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -544,7 +556,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#統計中的信賴區間confidence-interval是什麼"><span class="nav-number">1.</span> <span class="nav-text">統計中的信賴區間(Confidence interval)是什麼?</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#貝氏定理bayes-theorem"><span class="nav-number">1.</span> <span class="nav-text">貝氏定理（Bayes Theorem）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#貝氏統計"><span class="nav-number">2.</span> <span class="nav-text">貝氏統計</span></a></li></ol></div>
             
 
           </div>
